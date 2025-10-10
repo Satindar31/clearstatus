@@ -1,8 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Github, Menu, X } from "lucide-react";
-
+import SignUp from "./auth/signup";
+import SignIn from "./auth/signin";
+import { authClient } from "@/lib/auth-client";
+import { User } from "better-auth";
+import Link from "next/link";
 interface HeaderProps {
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
@@ -12,6 +16,17 @@ export default function Header({
   mobileMenuOpen,
   setMobileMenuOpen,
 }: HeaderProps) {
+  const [openAuthModal, setOpenAuthModal] = React.useState(false);
+  const [openAuthModalLogin, setOpenAuthModalLogin] = React.useState(false);
+
+  const { data: session, isPending } = authClient.useSession();
+  const [user, setUser] = useState<User | null>();
+  useEffect(() => {
+    if (isPending == false) {
+      setUser(session?.user ?? null);
+    }
+  }, [isPending]);
+
   return (
     <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,9 +66,34 @@ export default function Header({
               <Github size={18} />
               <span>Source</span>
             </a>
-            <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg">
-              Get Started
-            </button>
+            {user ? (
+              <Link href="/dashboard">
+                <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg">
+                  Dashboard
+                </button>
+              </Link>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setOpenAuthModal(true);
+                    setOpenAuthModalLogin(false);
+                  }}
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
+                >
+                  Get Started
+                </button>
+                <button
+                  onClick={() => {
+                    setOpenAuthModalLogin(true);
+                    setOpenAuthModal(false);
+                  }}
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
+                >
+                  Sign In
+                </button>
+              </>
+            )}
           </nav>
 
           <button
@@ -65,6 +105,8 @@ export default function Header({
         </div>
       </div>
 
+      {openAuthModal && <SignUp />}
+      {openAuthModalLogin && <SignIn />}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="px-4 py-4 space-y-4">

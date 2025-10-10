@@ -13,6 +13,9 @@
     "@prisma/adapter-pg": "^6.17.0",
     "@prisma/client": "^6.17.0",
     "better-auth": "^1.3.26",
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
@@ -20,6 +23,8 @@
     "prisma": "^6.17.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "shadcn": "^3.4.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

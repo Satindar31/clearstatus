@@ -16,6 +16,112 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+model StatusPage {
+  id             String        @id
+  title          String
+  slug           String        @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now()) @updatedAt
+  published      Boolean       @default(false)
+  authorId       String
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String?
+  Incident       Incident[]
+  Monitor        Monitor[]
+  Webhook        Webhook[]
+
+  @@map("page")
+}
+
+model Monitor {
+  id            String        @id
+  name          String
+  url           String
+  description   String?
+  type          MonitorType
+  uptimeChecker UptimeChecker @default(HETRIXTOOLS)
+  status        MonitorStatus @default(UNKNOWN)
+  isVisible     Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+  statusPageId  String
+  statusPage    StatusPage    @relation(fields: [statusPageId], references: [id], onDelete: Cascade)
+  Webhook       Webhook[]     @relation("WebhookMonitors")
+  Incident      Incident[]    @relation("IncidentMonitors")
+
+  @@map("monitor")
+}
+
+enum MonitorType {
+  HTTP
+  PING
+  TCP
+  DNS
+  SMTP
+  POP3
+  IMAP
+  CUSTOM
+}
+
+enum MonitorStatus {
+  UP
+  DOWN
+  PAUSED
+  UNKNOWN
+}
+
+model Incident {
+  id           String           @id
+  title        String
+  description  String?
+  status       IncidentStatus   @default(OPEN)
+  severity     IncidentSeverity @default(MINOR)
+  reportedBy   User             @relation(fields: [reportedById], references: [id], onDelete: Cascade)
+  statusPage   StatusPage       @relation(fields: [statusPageId], references: [id], onDelete: Cascade)
+  monitors     Monitor[]        @relation("IncidentMonitors")
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @default(now()) @updatedAt
+  resolvedAt   DateTime?
+  statusPageId String
+  reportedById String
+  Webhook      Webhook[]        @relation("WebhookIncidents")
+
+  @@map("incident")
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+}
+
+enum IncidentSeverity {
+  MINOR
+  MAJOR
+  CRITICAL
+}
+
+model Webhook {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  monitor       Monitor       @relation("WebhookMonitors", references: [id], fields: [monitorId], onDelete: Cascade)
+  statusPage    StatusPage    @relation(fields: [statusPageId], references: [id], onDelete: Cascade)
+  incidents     Incident[]    @relation("WebhookIncidents")
+  uptimeChecker UptimeChecker
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+  monitorId     String
+  statusPageId  String
+
+  @@map("webhook")
+}
+
+enum UptimeChecker {
+  HETRIXTOOLS
+}
+
 model User {
   id            String    @id
   name          String
@@ -26,6 +132,13 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  twoFactorEnabled Boolean?     @default(false)
+  passkeys         Passkey[]
+  members          Member[]
+  invitations      Invitation[]
+  twofactors       TwoFactor[]
+  Incident         Incident[]
 
   @@unique([email])
   @@map("user")
@@ -41,6 +154,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeOrganizationId String?
 
   @@unique([token])
   @@map("session")
@@ -74,4 +189,72 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@map("passkey")
+}
+
+model Organization {
+  id          String       @id
+  name        String
+  slug        String?
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+  statusPages StatusPage[]
+
+  @@unique([slug])
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String
+  createdAt      DateTime
+
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
+}
+
+model TwoFactor {
+  id          String @id
+  secret      String
+  backupCodes String
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
 }
