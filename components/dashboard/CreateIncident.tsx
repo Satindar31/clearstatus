@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Monitor, Incident, IncidentStatus, IncidentSeverity } from "@/types";
+import { Monitor, Incident} from "@/types";
+
 import { toast } from 'sonner';
+import { IncidentSeverity, IncidentStatus } from '@/generated/prisma/enums';
 
 interface CreateIncidentProps {
   statusPageId: string;
@@ -22,14 +24,15 @@ export function CreateIncident({ statusPageId, onCancel, onCreated }: CreateInci
 
     const newIncident: Incident = {
       id: crypto.randomUUID(),
-      status_page_id: statusPageId,
+      statusPageId: statusPageId,
       title,
       description,
       status,
       severity,
-      started_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      reportedBy: null as any, // This will be set by the backend
+      monitors: [], // Later, we can add monitor associations if needed
     };
 
     fetch("/api/incidents", {

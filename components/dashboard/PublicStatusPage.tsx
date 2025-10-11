@@ -129,7 +129,7 @@ export function PublicStatusPage({ slug }: PublicStatusPageProps) {
                       <p className="text-slate-700 mb-3">{incident.description}</p>
                       <div className="flex items-center gap-2 text-sm text-slate-500">
                         <Calendar className="w-4 h-4" />
-                        <span>Started {new Date(incident.started_at).toLocaleString()}</span>
+                        <span>Started {new Date(incident.createdAt).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
