@@ -1,7 +1,10 @@
-import { Organization, Webhook } from '@/generated/prisma/client';
-import { MonitorStatus, MonitorType } from '@/generated/prisma/enums';
-export type IncidentStatus = 'INVESTIGATING' | 'IDENTIFIED' | 'MONITORING' | 'RESOLVED';
-export type IncidentSeverity = 'MINOR' | 'MAJOR' | 'CRITICAL';
+import { Organization, User, Webhook } from "@/generated/prisma/client";
+import {
+  IncidentSeverity,
+  IncidentStatus,
+  MonitorStatus,
+  MonitorType,
+} from "@/generated/prisma/enums";
 
 export interface StatusPage {
   id: string;
@@ -43,15 +46,16 @@ export interface MonitorCheck {
 
 export interface Incident {
   id: string;
-  status_page_id: string;
+  statusPageId: string;
   title: string;
   description: string;
   status: IncidentStatus;
   severity: IncidentSeverity;
-  started_at: string;
-  resolved_at?: string;
-  created_at: string;
-  updated_at: string;
+  reportedBy: User;
+  monitors: Monitor[];
+  resolvedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IncidentUpdate {

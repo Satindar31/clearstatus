@@ -79,7 +79,7 @@ export function IncidentList({ incidents }: IncidentListProps) {
                       <h4 className="font-semibold text-slate-900 mb-1">{incident.title}</h4>
                       <p className="text-sm text-slate-600 mb-3">{incident.description}</p>
                       <div className="flex items-center gap-2 text-sm text-slate-500">
-                        <span>Started {new Date(incident.created_at).toLocaleString()}</span>
+                        <span>Started {new Date(incident.createdAt).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -110,7 +110,7 @@ export function IncidentList({ incidents }: IncidentListProps) {
                   <div className="flex-1">
                     <h4 className="font-semibold text-slate-900 mb-1">{incident.title}</h4>
                     <div className="text-sm text-slate-600">
-                      Resolved {incident.updated_at && new Date(incident.updated_at).toLocaleString()}
+                      Resolved {incident.updatedAt && new Date(incident.updatedAt).toLocaleString()}
                     </div>
                   </div>
                 </div>
