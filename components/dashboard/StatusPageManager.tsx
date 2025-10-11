@@ -269,11 +269,11 @@ export function StatusPageManager({
                       Integration API
                     </h3>
                     <p className="text-sm text-blue-700 mb-3">
-                      Connect external uptime monitors like UptimeRobot to
+                      Connect external uptime monitors like UptimeRobot or Hetrixtools to
                       automatically update your status page
                     </p>
                     <code className="block px-3 py-2 bg-white border border-blue-200 rounded text-sm text-slate-700">
-                      POST /api/webhook/{statusPage.id}
+                      POST {process.env.NEXT_PUBLIC_BASE_URL}/api/incidents/webhooks/your-uptimetool/monitor-id
                     </code>
                   </div>
                 </div>

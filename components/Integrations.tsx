@@ -1,40 +1,40 @@
 "use client";
 
-
-import React from 'react';
-import { Activity, BarChart3, Cpu, Globe, Server, Wifi } from 'lucide-react';
+import React from "react";
+import { Activity, BarChart3, Cpu, Globe, Server, Wifi } from "lucide-react";
 
 const integrations = [
+  // {
+  //   name: 'Uptime Robot',
+  //   icon: <Activity className="w-8 h-8" />,
+  //   description: 'Monitor your websites and get instant alerts when they go down.'
+  // },
   {
-    name: 'Uptime Robot',
-    icon: <Activity className="w-8 h-8" />,
-    description: 'Monitor your websites and get instant alerts when they go down.'
+    name: "HetrixTools",
+    icon: <Server className="w-8 h-8" />,
+    description: "Automate your status page using HetrixTools.",
   },
-//   {
-//     name: 'HetrixTools',
-//     icon: <BarChart3 className="w-8 h-8" />,
-//     description: 'Comprehensive monitoring solution for servers, websites, and network services.'
-//   },
-//   {
-//     name: 'Freshping',
-//     icon: <Wifi className="w-8 h-8" />,
-//     description: 'Simple and reliable website monitoring with global monitoring locations.'
-//   },
-//   {
-//     name: 'Pingdom',
-//     icon: <Globe className="w-8 h-8" />,
-//     description: 'Website performance and availability monitoring from multiple locations.'
-//   },
-//   {
-//     name: 'StatusCake',
-//     icon: <Server className="w-8 h-8" />,
-//     description: 'Website uptime monitoring with detailed performance insights.'
-//   },
+  //   {
+  //     name: 'Freshping',
+  //     icon: <Wifi className="w-8 h-8" />,
+  //     description: 'Simple and reliable website monitoring with global monitoring locations.'
+  //   },
+  //   {
+  //     name: 'Pingdom',
+  //     icon: <Globe className="w-8 h-8" />,
+  //     description: 'Website performance and availability monitoring from multiple locations.'
+  //   },
+  //   {
+  //     name: 'StatusCake',
+  //     icon: <Server className="w-8 h-8" />,
+  //     description: 'Website uptime monitoring with detailed performance insights.'
+  //   },
   {
-    name: 'Custom API',
+    name: "Custom API",
     icon: <Cpu className="w-8 h-8" />,
-    description: 'Integrate with any monitoring service through our flexible API system.'
-  }
+    description:
+      "Integrate with any monitoring service through our flexible API system.",
+  },
 ];
 
 export default function Integrations() {
@@ -46,14 +46,14 @@ export default function Integrations() {
             Works With Your Tools
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            ClearStatus integrates seamlessly with popular monitoring services. 
+            ClearStatus integrates seamlessly with popular monitoring services.
             Connect your existing monitoring setup in minutes, not hours.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {integrations.map((integration, index) => (
-            <div 
+            <div
               key={index}
               className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl border border-gray-100 hover:border-green-200 transition-all duration-300"
             >
@@ -72,7 +72,8 @@ export default function Integrations() {
 
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-6">
-            Don't see your monitoring service? We're constantly adding new integrations.
+            Don't see your monitoring service? We're constantly adding new
+            integrations.
           </p>
           <button className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg">
             Request Integration
