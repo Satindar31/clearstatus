@@ -32,7 +32,7 @@ export interface Monitor {
   uptimeChecker?: UptimeChecker
   url?: string;
   status: MonitorStatus;
-  webhook?: Webhook
+  Webhook?: Webhook
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;

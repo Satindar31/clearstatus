@@ -43,7 +43,7 @@ export function MonitorList({ monitors }: MonitorListProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <div className={`w-3 h-3 rounded-full ${statusColors[monitor.status]}`} />
-                  <h3 onClick={(e) => window.navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/api/incidents/webhooks/${monitor.uptimeChecker}/${monitor.webhook?.slug}`)} className="font-semibold text-slate-900">{monitor.name}</h3>
+                  <h3 onClick={(e) => window.navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/api/incidents/webhooks/${monitor.uptimeChecker?.toLocaleLowerCase()}/${monitor.Webhook?.slug}`)} className="font-semibold text-slate-900">{monitor.name}</h3>
                   <span className="text-sm text-slate-500">{statusLabels[monitor.status]}</span>
                 </div>
                 {monitor.description && (
