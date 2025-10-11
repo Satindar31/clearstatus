@@ -10,6 +10,9 @@ export async function GET(request: Request) {
     where: {
       statusPageId,
     },
+    include: {
+      Webhook: true,
+    }
   });
   return new Response(JSON.stringify(monitors), { status: 200 });
 }

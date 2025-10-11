@@ -4,6 +4,7 @@ import {
   IncidentStatus,
   MonitorStatus,
   MonitorType,
+  UptimeChecker,
 } from "@/generated/prisma/enums";
 
 export interface StatusPage {
@@ -28,8 +29,10 @@ export interface Monitor {
   name: string;
   description?: string;
   monitorType: MonitorType;
+  uptimeChecker?: UptimeChecker
   url?: string;
   status: MonitorStatus;
+  webhook?: Webhook
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;
