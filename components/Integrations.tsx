@@ -2,6 +2,9 @@
 
 import React from "react";
 import { Activity, BarChart3, Cpu, Globe, Server, Wifi } from "lucide-react";
+import Image from "next/image";
+import hetrixtoolslogo from "@/public/integrations/hetrix/icon 300.png"
+import Link from "next/link";
 
 const integrations = [
   // {
@@ -11,14 +14,14 @@ const integrations = [
   // },
   {
     name: "HetrixTools",
-    icon: <Server className="w-8 h-8" />,
-    description: "Automate your status page using HetrixTools.",
+    icon: <Image alt="hetrixtools logo" fill={true} src={hetrixtoolslogo} className="w-8 h-8" />,
+    description: "Automate incident creation/resolution using HetrixTools.",
   },
-  //   {
-  //     name: 'Freshping',
-  //     icon: <Wifi className="w-8 h-8" />,
-  //     description: 'Simple and reliable website monitoring with global monitoring locations.'
-  //   },
+    {
+      name: 'Updown.io',
+      icon: <Wifi className="w-8 h-8" />,
+      description: 'Automate incident creation/resolution using Updown.io.'
+    },
   //   {
   //     name: 'Pingdom',
   //     icon: <Globe className="w-8 h-8" />,
@@ -75,9 +78,11 @@ export default function Integrations() {
             Don't see your monitoring service? We're constantly adding new
             integrations.
           </p>
-          <button className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg">
-            Request Integration
-          </button>
+          <Link href="https://tally.so/r/mZqq9o" target="_blank" rel="noopener">
+            <button className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg">
+              Request Integration
+            </button>
+          </Link>
         </div>
       </div>
     </section>

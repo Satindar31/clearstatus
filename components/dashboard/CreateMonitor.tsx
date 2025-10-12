@@ -26,49 +26,64 @@ export function CreateMonitor({
     e.preventDefault();
     setLoading(true);
 
-    if (monitorType === "hetrixtools") {
-      fetch("/api/monitors/create", {
-        method: "POST",
-        body: JSON.stringify({
-          statusPageId,
-          name,
-          description,
-          url,
-          monitorType,
-          status,
-          isVisible,
-        }),
-      }).then(async (res) => {
-        setLoading(false);
-        if (res.ok) {
-          const newMonitor = (await res.json()) as Monitor;
-          onCreated(newMonitor);
-          // Create associated webhook
-          fetch("/api/incidents/webhooks/createWebhook", {
-            method: "POST",
-            body: JSON.stringify({
-              checker: monitorType,
-              monitorId: newMonitor.id,
-              statusPageId,
-            }),
-          }).then(async (res) => {
-            if (res.ok) {
-              const webhook = await res.json();
-              toast.success("Monitor and webhook created successfully. Use this webhook URL in Hetrixtools: " + `${process.env.NEXT_PUBLIC_BASE_URL}/api/incidents/webhooks/hetrixtools/${webhook.slug}`, {
-                action: { label: 'Copy URL', onClick: async () => {
-                  window.navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BASE_URL}/api/incidents/webhooks/hetrixtools/${webhook.slug}`);
-                } }
-              });
-              onCreated(newMonitor);
-            }
-          });
-        } else {
-          console.error("Failed to create monitor");
-        }
-      });
-      return;
-    }
-
+    fetch("/api/monitors/create", {
+      method: "POST",
+      body: JSON.stringify({
+        statusPageId,
+        name,
+        description,
+        url,
+        monitorType,
+        status,
+        isVisible,
+      }),
+    }).then(async (res) => {
+      setLoading(false);
+      if (res.ok) {
+        const newMonitor = (await res.json()) as Monitor;
+        onCreated(newMonitor);
+        // Create associated webhook
+        fetch("/api/incidents/webhooks/createWebhook", {
+          method: "POST",
+          body: JSON.stringify({
+            checker: monitorType,
+            monitorId: newMonitor.id,
+            statusPageId,
+          }),
+        }).then(async (res) => {
+          if (res.ok) {
+            const webhook = await res.json();
+            toast.success(
+              "Monitor and webhook created successfully. Use this webhook URL in Hetrixtools: " +
+                `${
+                  process.env.NEXT_PUBLIC_BASE_URL
+                }/api/incidents/webhooks/${webhook.uptimeChecker.toLowerCase()}/${
+                  webhook.slug
+                }`,
+              {
+                action: {
+                  label: "Copy URL",
+                  onClick: async () => {
+                    window.navigator.clipboard.writeText(
+                      `${
+                        process.env.NEXT_PUBLIC_BASE_URL
+                      }/api/incidents/webhooks/${webhook.uptimeChecker.toLowerCase()}/${
+                        webhook.slug
+                      }`
+                    );
+                  },
+                },
+              }
+            );
+            onCreated(newMonitor);
+          }
+        });
+      } else {
+        toast.error("Failed to create monitor");
+        console.error("Failed to create monitor");
+      }
+    });
+    return;
   };
 
   return (
@@ -140,8 +155,8 @@ export function CreateMonitor({
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
             >
               <option value="hetrixtools">Hetrixtools</option>
-              {/* <option value="uptimerobot">UptimeRobot</option>
-              <option value="pingdom">Pingdom</option>
+              <option value="updown">Updown.io</option>
+              {/* <option value="pingdom">Pingdom</option>
               <option value="statuspage">StatusPage</option> */}
             </select>
           </div>

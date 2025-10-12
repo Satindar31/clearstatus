@@ -62,7 +62,7 @@ export default function Pricing() {
               href="https://github.com/satindar31/clearstatus" 
               className="text-blue-600 hover:text-blue-700 font-semibold ml-2"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
             >
               Give us a star on GitHub ⭐
             </a>

@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { Github, Heart, Mail } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -21,40 +22,40 @@ export default function Footer() {
               Built by developers, for developers.
             </p>
             <div className="flex items-center space-x-4 mt-6">
-              <a 
+              <Link 
                 href="https://github.com/satindar31/clearstatus"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Github size={24} />
-              </a>
-              <a 
-                href="mailto:contact@clearstatus.com"
+              </Link>
+              <Link
+                href="mailto:me@hiihi.xyz"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Mail size={24} />
-              </a>
+              </Link>
             </div>
           </div>
 
           <div>
             <h3 className="font-bold text-lg mb-4">Product</h3>
             <ul className="space-y-3">
-              <li><a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-              <li><a href="#integrations" className="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">API</a></li>
+              <li><Link href="#features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
+              <li><Link href="#integrations" className="text-gray-400 hover:text-white transition-colors">Integrations</Link></li>
+              <li><Link href="#documentation" className="text-gray-400 hover:text-white transition-colors">Documentation</Link></li>
+              <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">API</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-bold text-lg mb-4">Community</h3>
             <ul className="space-y-3">
-              <li><a href="https://github.com/satindar31/clearstatus" className="text-gray-400 hover:text-white transition-colors">GitHub</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Discord</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Discussions</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contributing</a></li>
+              <li><Link href="https://github.com/satindar31/clearstatus" className="text-gray-400 hover:text-white transition-colors">GitHub</Link></li>
+              <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Discord</Link></li>
+              <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Discussions</Link></li>
+              <li><Link href="https://github.com/satindar31/clearstatus" className="text-gray-400 hover:text-white transition-colors">Contributing</Link></li>
             </ul>
           </div>
         </div>
@@ -66,7 +67,7 @@ export default function Footer() {
             <span>for the developer community</span>
           </div>
           <div className="mt-4 md:mt-0 text-gray-400">
-            <span>© 2025 ClearStatus. Open source under MIT License.</span>
+            <span>© 2025 ClearStatus. Open source under AGPL-3.0 License.</span>
           </div>
         </div>
       </div>

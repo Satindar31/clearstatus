@@ -58,12 +58,7 @@ export function CreateStatusPage({
         console.error("Failed to create status page");
         toast.error("Failed to create status page");
       }
-    }).catch((err) => {
-      setLoading(false);
-      console.error("Error creating status page:", err);
-      toast.error("Error creating status page");
-    });
-
+    })
       onCreated(newPage);
     } catch (err: any) {
       setError(err.message || "An error occurred");

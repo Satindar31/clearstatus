@@ -105,7 +105,7 @@ export default function Dashboard() {
                   authClient.signOut({
                     fetchOptions: {
                       onSuccess: () => {
-                        router.push("/");
+                        window.location.href = "/";
                       },
                     },
                   })

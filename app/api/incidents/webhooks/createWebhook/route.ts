@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   try {
     const webhook = await prisma.webhook.create({
       data: {
-        uptimeChecker: checker.toUpperCase() as "HETRIXTOOLS",
+        uptimeChecker: checker.toUpperCase() as "HETRIXTOOLS" | "UPDOWN",
         slug: monitorId,
         monitor: {
           connect: {

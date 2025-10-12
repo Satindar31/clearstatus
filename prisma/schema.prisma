@@ -120,6 +120,7 @@ model Webhook {
 
 enum UptimeChecker {
   HETRIXTOOLS
+  UPDOWN
 }
 
 model User {
