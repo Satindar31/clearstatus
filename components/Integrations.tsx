@@ -27,11 +27,11 @@ const integrations = [
   //     icon: <Globe className="w-8 h-8" />,
   //     description: 'Website performance and availability monitoring from multiple locations.'
   //   },
-  //   {
-  //     name: 'StatusCake',
-  //     icon: <Server className="w-8 h-8" />,
-  //     description: 'Website uptime monitoring with detailed performance insights.'
-  //   },
+    {
+      name: 'StatusCake',
+      icon: <Server className="w-8 h-8" />,
+      description: 'Website uptime monitoring with detailed performance insights.'
+    },
   {
     name: "Custom API",
     icon: <Cpu className="w-8 h-8" />,

@@ -1,3 +1,4 @@
+import { UptimeChecker } from "@/generated/prisma/enums";
 import prisma from "@/prisma/prisma";
 
 export async function POST(request: Request) {
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
   try {
     const webhook = await prisma.webhook.create({
       data: {
-        uptimeChecker: checker.toUpperCase() as "HETRIXTOOLS" | "UPDOWN",
+        uptimeChecker: checker.toUpperCase() as UptimeChecker,
         slug: monitorId,
         monitor: {
           connect: {

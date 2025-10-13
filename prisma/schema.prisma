@@ -121,6 +121,14 @@ model Webhook {
 enum UptimeChecker {
   HETRIXTOOLS
   UPDOWN
+  STATUSCAKE
+  PINGDOM
+  CHECKLY
+  DATADOG
+  PAGERDUTY
+  NEWRELIC
+  UPTIMEROBOT
+  BETTERUPTIME
 }
 
 model User {

@@ -156,8 +156,8 @@ export function CreateMonitor({
             >
               <option value="hetrixtools">Hetrixtools</option>
               <option value="updown">Updown.io</option>
-              {/* <option value="pingdom">Pingdom</option>
-              <option value="statuspage">StatusPage</option> */}
+              <option value="statuscake">StatusCake</option>
+              {/* <option value="statuspage">StatusPage</option> */}
             </select>
           </div>
 
