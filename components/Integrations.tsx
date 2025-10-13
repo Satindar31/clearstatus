@@ -3,7 +3,7 @@
 import React from "react";
 import { Activity, BarChart3, Cpu, Globe, Server, Wifi } from "lucide-react";
 import Image from "next/image";
-import hetrixtoolslogo from "@/public/integrations/hetrix/icon 300.png"
+import hetrixtoolslogo from "@/public/integrations/hetrix/icon 300 transparent cropped.png"
 import Link from "next/link";
 
 const integrations = [
