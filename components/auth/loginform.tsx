@@ -22,6 +22,7 @@ const [loading, setLoading] = React.useState(false);
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const provider = formData.get("provider");
+    console.log({ provider });
     if (provider && !Array.isArray(provider)) {
       if (provider === "google") {
         authClient.signIn.social({
@@ -49,6 +50,8 @@ const [loading, setLoading] = React.useState(false);
     const email = formData.get("email");
     const password = formData.get("password");
     if (!email || !password || Array.isArray(email) || Array.isArray(password)) {
+      toast.error("Email and password are required");
+      setLoading(false);
       throw new Error("Email and password required");
     }
     authClient.signIn.email({
@@ -61,6 +64,7 @@ const [loading, setLoading] = React.useState(false);
         },
         onError: (ctx: { error: { message: any } }) => {
           toast.error(ctx.error.message);
+          setLoading(false);
         },
       },
     });
@@ -86,7 +90,6 @@ const [loading, setLoading] = React.useState(false);
             name="email"
             type="email"
             placeholder="m@example.com"
-            required
           />
         </div>
         <div className="grid gap-3">
@@ -96,9 +99,13 @@ const [loading, setLoading] = React.useState(false);
               Forgot your password?
             </p>
           </div>
-          <Input id="password" name="password" type="password" required />
+          <Input id="password" name="password" type="password" />
         </div>
-        <Button disabled={loading} type="submit" className="w-full">
+        <Button
+          disabled={loading}
+          type="submit"
+          className="w-full"
+        >
           {loading ? "Logging in..." : "Login"}
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -108,11 +115,17 @@ const [loading, setLoading] = React.useState(false);
         </div>
         <Button
           data-umami-event="Login with google button"
-          type="submit"
+          type="button"
           variant="outline"
           className="w-full"
-          name="provider"
-          value={"google"}
+          onClick={() => {
+            setLoading(true);
+            authClient.signIn.social({
+              provider: "google",
+              callbackURL: "/dashboard",
+              newUserCallbackURL: "/dashboard",
+            });
+          }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
@@ -127,9 +140,14 @@ const [loading, setLoading] = React.useState(false);
           data-umami-event="Signup with simplelogin button"
           variant="outline"
           className="w-full"
-          type="submit"
-          name="provider"
-          value={"github"}
+          type="button"
+          onClick={() => {
+            setLoading(true);
+            authClient.signIn.social({
+              provider: "github",
+              callbackURL: "/dashboard",
+            });
+          }}
         >
           <svg
             viewBox="0 0 256.00 256.00"
@@ -164,9 +182,17 @@ const [loading, setLoading] = React.useState(false);
           data-umami-event="Signup with passkey button"
           variant="outline"
           className="w-full"
-          type="submit"
-          name="provider"
-          value={"passkey"}
+          type="button"
+          onClick={() => {
+            setLoading(true);
+            authClient.signIn.passkey({
+              fetchOptions: {
+                onSuccess: () => {
+                  console.log("Successfully signed in with passkey");
+                },
+              },
+            });
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

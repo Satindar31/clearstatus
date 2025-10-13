@@ -14,7 +14,7 @@ const integrations = [
   // },
   {
     name: "HetrixTools",
-    icon: <Image alt="hetrixtools logo" fill={true} src={hetrixtoolslogo} className="w-8 h-8" />,
+    icon: <Image alt="hetrixtools logo" width={32} height={32} src={hetrixtoolslogo} />,
     description: "Automate incident creation/resolution using HetrixTools.",
   },
     {
