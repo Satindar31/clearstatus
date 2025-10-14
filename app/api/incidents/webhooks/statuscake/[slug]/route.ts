@@ -65,6 +65,12 @@ export async function POST(request: Request) {
         data: {
           status: IncidentStatus.RESOLVED,
           resolvedAt: new Date(),
+          monitors: {
+            update: {
+              where: { id: monitor.id },
+              data: { status: MonitorStatus.UP },
+            },
+          },
         },
       });
     }
@@ -75,6 +81,12 @@ export async function POST(request: Request) {
         },
         data: {
           status: IncidentStatus.OPEN,
+          monitors: {
+            update: {
+              where: { id: monitor.id },
+              data: { status: MonitorStatus.DOWN },
+            },
+          },
         },
       });
     }

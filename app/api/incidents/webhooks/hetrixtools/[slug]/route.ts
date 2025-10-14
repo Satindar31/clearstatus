@@ -46,6 +46,12 @@ export async function POST(request: Request) {
         where: { id: incident.id },
         data: {
           status: IncidentStatus.RESOLVED,
+          monitors: {
+            update: {
+              where: { id: monitor.id },
+              data: { status: MonitorStatus.UP },
+            },
+          },
           resolvedAt: new Date(),
         },
       });
@@ -56,6 +62,12 @@ export async function POST(request: Request) {
           id: incident.id,
         },
         data: {
+          monitors: {
+            update: {
+              where: { id: monitor.id },
+              data: { status: MonitorStatus.DOWN },
+            },
+          },
           status: IncidentStatus.OPEN,
         },
       });
@@ -64,7 +76,9 @@ export async function POST(request: Request) {
     await prisma.incident.create({
       data: {
         monitors: {
-          connect: { id: monitor.id },
+          connect: {
+            id: monitor.id,
+          }
         },
         status: _status || IncidentStatus.OPEN,
         title: body.incident_title || `Incident for monitor ${monitor.name}`,
