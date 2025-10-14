@@ -3,8 +3,11 @@
 
 import React from 'react';
 import { Check, Heart } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Pricing() {
+  const router = useRouter();
+
   return (
     <section id="pricing" className="py-20 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -46,7 +49,7 @@ export default function Pricing() {
             ))}
           </div>
 
-          <button className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-green-700 transition-all shadow-lg hover:shadow-xl">
+          <button onClick={() => router.push("/register")} className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-green-700 transition-all shadow-lg hover:shadow-xl">
             Start Building Now
           </button>
           

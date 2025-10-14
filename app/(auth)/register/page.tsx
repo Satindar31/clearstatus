@@ -3,13 +3,24 @@ import Image from "next/image";
 import { RegisterForm } from "@/components/auth/registerform";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session?.user) {
+    return redirect("/dashboard");
+  }
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="bg-muted relative hidden lg:block">
         <Image
-        fill
+          fill
           src="/registerBg.svg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
@@ -23,7 +34,20 @@ export default function RegisterPage() {
             </div>
             <p>ClearStatus</p>
           </Link>
-          <p className="text-sm">Illustration by <Button variant="link" asChild size="sm" className="p-0"><Link href="https://unsplash.com/@andsproject?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">ands</Link></Button> on <Button variant="link" size="sm" className="p-0"><Link href="https://unsplash.com/illustrations/girl-reaches-for-the-moon-in-a-dreamy-night-sky--ZVXDrYaN8o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</Link></Button></p>
+          <p className="text-sm">
+            Illustration by{" "}
+            <Button variant="link" asChild size="sm" className="p-0">
+              <Link href="https://unsplash.com/@andsproject?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+                ands
+              </Link>
+            </Button>{" "}
+            on{" "}
+            <Button variant="link" size="sm" className="p-0">
+              <Link href="https://unsplash.com/illustrations/girl-reaches-for-the-moon-in-a-dreamy-night-sky--ZVXDrYaN8o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+                Unsplash
+              </Link>
+            </Button>
+          </p>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">

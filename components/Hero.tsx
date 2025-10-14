@@ -3,10 +3,10 @@
 import React from "react";
 import { ArrowRight, Github, Star } from "lucide-react";
 import SignUp from "./auth/signup";
-;
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
-  const [authModalOpen, setAuthModalOpen] = React.useState(false);
+  const router = useRouter();
 
   return (
     <section className="pt-20 pb-16 bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -36,7 +36,7 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <button
-              onClick={() => setAuthModalOpen(true)}
+              onClick={() => router.push("/register")}
               className="group bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl flex items-center space-x-2"
             >
               <span>Get Started Free</span>
@@ -111,7 +111,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      {authModalOpen && <SignUp />}
     </section>
   );
 }

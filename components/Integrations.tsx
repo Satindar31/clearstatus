@@ -4,6 +4,7 @@ import React from "react";
 import { Activity, BarChart3, Cpu, Globe, Server, Wifi } from "lucide-react";
 import Image from "next/image";
 import hetrixtoolslogo from "@/public/integrations/hetrix/icon 300 transparent cropped.png"
+import updownLogo from "@/public/integrations/updown/square-logo.svg"
 import Link from "next/link";
 
 const integrations = [
@@ -19,7 +20,7 @@ const integrations = [
   },
     {
       name: 'Updown.io',
-      icon: <Wifi className="w-8 h-8" />,
+      icon: <Image alt="updown.io logo" width={32} height={32} src={updownLogo} />,
       description: 'Automate incident creation/resolution using Updown.io.'
     },
   //   {
@@ -30,7 +31,7 @@ const integrations = [
     {
       name: 'StatusCake',
       icon: <Server className="w-8 h-8" />,
-      description: 'Website uptime monitoring with detailed performance insights.'
+      description: 'Automate incident creation/resolution using Updown.io.'
     },
   {
     name: "Custom API",

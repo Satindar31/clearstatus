@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
-import { StatusPage, Monitor, Incident } from "@/types";
+import { StatusPage } from "@/types";
 import { Plus, Activity, LogOut, LayoutDashboard } from "lucide-react";
 import { StatusPageManager } from "@/components/dashboard/StatusPageManager";
 import { CreateStatusPage } from "@/components/dashboard/CreateStatusPage";
-import { useRouter } from "next/navigation";
 import type { User } from "better-auth";
 
 export default function Dashboard() {
-  const router = useRouter();
 
   const [statusPages, setStatusPages] = useState<StatusPage[]>([]);
   const [selectedPage, setSelectedPage] = useState<StatusPage | null>(null);
