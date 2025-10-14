@@ -1,22 +1,18 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { SectionCards } from "@/components/section-cards";
 import { isUserAdmin } from "@/hooks/admin/stats";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 export default async function Page() {
   const session = await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
+    headers: await headers()
   });
   const admin = await isUserAdmin(session?.user?.email);
 
   if (!admin) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <h1 className="text-2xl font-bold">Access Denied</h1>
-      </div>
-    );
+    throw notFound()
   }
   return (
     <div className="min-h-screen bg-background">
@@ -34,12 +30,6 @@ export default async function Page() {
               <Suspense fallback={<div>Loading...</div>}>
                 <SectionCards />
               </Suspense>
-              <div className="px-4 lg:px-6">
-                <Suspense fallback={<div>Loading...</div>}>
-                  {/* <ChartAreaInteractive /> */}
-                </Suspense>
-              </div>
-              {/* <DataTable data={data} /> */}
             </div>
           </div>
         </div>
