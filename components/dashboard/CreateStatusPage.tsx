@@ -51,8 +51,9 @@ export function CreateStatusPage({
       setLoading(false);
       if (res.ok) {
         const incident = await res.json();
-        onCreated(incident);
         toast.success("Status page created successfully");
+        window.location.href = `/dashboard`;
+        onCreated(incident);
       } else {
         // Handle error (e.g., show notification)
         console.error("Failed to create status page");
