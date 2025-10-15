@@ -42,6 +42,7 @@ export function CreateStatusPage({
         createdAt: new Date(),
         updatedAt: new Date(),
         organizationId: null,
+        overAllStatus: "ALL_OPERATIONAL" // Just for ts
       };
 
       fetch("/api/statuspage", {
