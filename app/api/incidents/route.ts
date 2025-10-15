@@ -2,6 +2,7 @@ import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth"; // path to your Better Auth server instance
 import { headers } from "next/headers";
+import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
 export async function POST(request: Request) {
   const {
     title,
@@ -31,16 +32,25 @@ export async function POST(request: Request) {
       data: {
         id: crypto.randomUUID(),
         title,
-        status: status.toUpperCase() as
-          | "INVESTIGATING"
-          | "IDENTIFIED"
-          | "MONITORING"
-          | "RESOLVED",
-        severity: severity.toUpperCase() as "MINOR" | "MAJOR" | "CRITICAL",
+        status: status.toUpperCase() as IncidentStatus,
+        description,
+        severity: severity.toUpperCase() as IncidentSeverity,
         statusPage: {
           connect: {
             id: status_page_id,
           },
+        },
+        Updates: {
+          create: {
+            id: crypto.randomUUID(),
+            message: description,
+            status: status.toUpperCase() as IncidentStatus,
+            updateBy: {
+              connect: {
+                id: user_id,
+              }
+            }
+          }
         },
         reportedBy: {
           connect: {

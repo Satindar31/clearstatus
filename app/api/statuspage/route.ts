@@ -26,6 +26,12 @@ export async function GET(request: Request) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  if(!session || !session.user) {
+    return new Response("Unauthorized", {
+      status: 401
+    })
+  }
   try {
     const statusPages = await prisma.statusPage.findMany({
       where: {

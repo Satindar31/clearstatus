@@ -2,6 +2,7 @@ import { StatusPage, Monitor, Incident } from "@/types";
 import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
 import { Checkbox } from "../ui/checkbox";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface IncidentListProps {
   incidents: Incident[];
@@ -76,7 +77,7 @@ export function IncidentList({ incidents }: IncidentListProps) {
                   <div className="flex items-start gap-3 flex-1">
                     {/* <StatusIcon className={`w-6 h-6 ${statusColors[incident.status.toUpperCase() as keyof typeof statusColors]} mt-0.5`} /> */}
                     <div className="flex-1">
-                      <h4 className="font-semibold text-slate-900 mb-1">{incident.title}</h4>
+                      <Link href={`/dashboard/updates/${incident.id}`} className="font-semibold text-slate-900 mb-1">{incident.title}</Link>
                       <p className="text-sm text-slate-600 mb-3">{incident.description}</p>
                       <div className="flex items-center gap-2 text-sm text-slate-500">
                         <span>Started {new Date(incident.createdAt).toLocaleString()}</span>
@@ -108,7 +109,7 @@ export function IncidentList({ incidents }: IncidentListProps) {
                 <div className="flex items-start gap-3 flex-1">
                   <CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
                   <div className="flex-1">
-                    <h4 className="font-semibold text-slate-900 mb-1">{incident.title}</h4>
+                    <Link href={`/dashboard/updates/${incident.id}`} className="font-semibold text-slate-900 mb-1">{incident.title}</Link>
                     <div className="text-sm text-slate-600">
                       Resolved {incident.updatedAt && new Date(incident.updatedAt).toLocaleString()}
                     </div>

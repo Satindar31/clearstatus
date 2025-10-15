@@ -4,6 +4,7 @@ import prisma from "@/prisma/prisma";
 
 export async function POST(request: Request) {
   const body = await request.json();
+  const error = body[0].downtime.error;
   // Extract slug from request URL (last string after last '/')
   const slug = request.url.split("/").pop();
   let _status;
@@ -15,12 +16,6 @@ export async function POST(request: Request) {
     return new Response("Event not handled", { status: 200 });
   }
 
-  console.log(
-    "Received webhook for slug:",
-    slug,
-    "with status:",
-    body[0].event
-  );
   if (!slug) {
     return new Response("Missing slug", { status: 400 });
   }
@@ -60,6 +55,20 @@ export async function POST(request: Request) {
               data: { status: MonitorStatus.UP },
             },
           },
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message:
+                body.incident_description ||
+                `Monitor ${monitor.name} is back up`,
+              status: IncidentStatus.RESOLVED,
+              updateBy: {
+                connect: {
+                  id: process.env.UPDOWN_USER_ID || "",
+                },
+              },
+            },
+          },
         },
       });
     }
@@ -76,6 +85,18 @@ export async function POST(request: Request) {
               data: { status: MonitorStatus.DOWN },
             },
           },
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message:
+                body.incident_description ||
+                `Monitor ${monitor.name} is still down (StatusCode: ${error.substring(
+                  0,
+                  3
+                )})`,
+              status: IncidentStatus.OPEN,
+            }
+          }
         },
       });
     }
@@ -97,8 +118,31 @@ export async function POST(request: Request) {
         statusPage: {
           connect: { id: monitor.statusPageId },
         },
+        Updates: {
+          create: {
+            id: crypto.randomUUID(),
+            message:
+              body.incident_description ||
+              `Monitor ${monitor.name} is down (StatusCode: ${error.substring(
+                0,
+                3
+              )})`,
+            status: _status || IncidentStatus.OPEN,
+            updateBy: {
+              connect: {
+                id: process.env.UPDOWN_USER_ID || "",
+              },
+            },
+          },
+        },
       },
     });
+        await prisma.monitor.update({
+      where: { id: monitor.id },
+      data: { status: _status == IncidentStatus.OPEN ? MonitorStatus.DOWN : MonitorStatus.UP },
+    });
   }
+
+
   return new Response("Incident processed", { status: 200 });
 }

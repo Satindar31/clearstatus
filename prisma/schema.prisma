@@ -29,8 +29,18 @@ model StatusPage {
   Incident       Incident[]
   Monitor        Monitor[]
   Webhook        Webhook[]
+  overAllStatus StatusPageStatus @default(ALL_OPERATIONAL)
 
   @@map("page")
+}
+
+enum StatusPageStatus {
+  ALL_OPERATIONAL
+  DEGRADED_PERFORMANCE
+  PARTIAL_OUTAGE
+  MAJOR_OUTAGE
+  MAINTENANCE
+  UNKNOWN
 }
 
 model Monitor {
@@ -85,6 +95,7 @@ model Incident {
   statusPageId String
   reportedById String
   Webhook      Webhook[]        @relation("WebhookIncidents")
+  Updates      Updates[]
 
   @@map("incident")
 }
@@ -131,6 +142,20 @@ enum UptimeChecker {
   BETTERUPTIME
 }
 
+model Updates {
+  id                String         @id
+  incidentId        String
+  incident          Incident       @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  message           String
+  status            IncidentStatus
+  updateBy          User?          @relation(fields: [updateById], references: [id], onDelete: SetNull)
+  updateById        String?
+  informSubscribers Boolean        @default(false)
+  createdAt         DateTime       @default(now())
+
+  @@map("update")
+}
+
 model User {
   id            String    @id
   name          String
@@ -149,6 +174,7 @@ model User {
   invitations      Invitation[]
   twofactors       TwoFactor[]
   Incident         Incident[]
+  Updates          Updates[]
 
   @@unique([email])
   @@map("user")

@@ -1,13 +1,24 @@
-import { Incident } from "@/generated/prisma/client";
+import { Incident, Updates } from "@/generated/prisma/client";
 import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
 import { Fragment } from "react";
-
 
 export function IncidentTimeline({
   items,
   loading,
 }: {
-  items: Incident[];
+  items: {
+    id: string;
+    title: string;
+    description: string | null;
+    status: IncidentStatus;
+    severity: IncidentSeverity;
+    createdAt: Date;
+    updatedAt: Date;
+    resolvedAt: Date | null;
+    statusPageId: string;
+    reportedById: string;
+    Updates: Updates[];
+  }[];
   loading?: boolean;
 }) {
   if (loading) {
@@ -55,9 +66,8 @@ export function IncidentTimeline({
           </div>
 
           {/* <div className="mt-2 text-xs text-muted-foreground">Affected: {inc.affectedComponents.join(", ")}</div> */}
-
-          {/* <div className="mt-3 space-y-2">
-            {inc.updates.map((u, idx) => (
+          <div className="mt-3 space-y-2">
+            {inc.Updates.map((u, idx) => (
               <div key={idx} className="flex items-start gap-3">
                 <span
                   className="mt-1 inline-block h-1.5 w-1.5 rounded-full"
@@ -65,13 +75,16 @@ export function IncidentTimeline({
                 />
                 <div className="text-sm">
                   <p className="leading-6">{u.message}</p>
-                  <time className="text-xs text-muted-foreground" dateTime={u.at}>
-                    {new Date(u.at).toLocaleString()}
+                  <time
+                    className="text-xs text-muted-foreground"
+                    dateTime={u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt}
+                  >
+                    {new Date(u.createdAt).toLocaleString()}
                   </time>
                 </div>
               </div>
             ))}
-          </div> */}
+          </div>
         </li>
       ))}
     </ol>

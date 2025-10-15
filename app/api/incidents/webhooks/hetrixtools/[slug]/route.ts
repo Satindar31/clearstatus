@@ -7,13 +7,19 @@ export async function POST(request: Request) {
   // Extract slug from request URL (last string after last '/')
   const slug = request.url.split("/").pop();
   let _status;
+
   if (body.monitor_status == "offline") {
     _status = IncidentStatus.OPEN;
   } else if (body.monitor_status == "online") {
     _status = IncidentStatus.RESOLVED;
   }
 
-  console.log("Received webhook for slug:", slug, "with status:", body.monitor_status);
+  console.log(
+    "Received webhook for slug:",
+    slug,
+    "with status:",
+    body.monitor_status
+  );
   if (!slug) {
     return new Response("Missing slug", { status: 400 });
   }
@@ -52,6 +58,20 @@ export async function POST(request: Request) {
               data: { status: MonitorStatus.UP },
             },
           },
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message:
+                body.incident_description ||
+                "Incident resolved: monitor is back online",
+              status: IncidentStatus.RESOLVED,
+              updateBy: {
+                connect: {
+                  id: process.env.HETRIXTOOLS_USER_ID || "",
+                },
+              },
+            },
+          },
           resolvedAt: new Date(),
         },
       });
@@ -69,6 +89,20 @@ export async function POST(request: Request) {
             },
           },
           status: IncidentStatus.OPEN,
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message:
+                body.incident_description ||
+                "Incident updated: monitor is still down",
+              status: IncidentStatus.OPEN,
+              updateBy: {
+                connect: {
+                  id: process.env.HETRIXTOOLS_USER_ID || "",
+                },
+              },
+            },
+          },
         },
       });
     }
@@ -78,7 +112,7 @@ export async function POST(request: Request) {
         monitors: {
           connect: {
             id: monitor.id,
-          }
+          },
         },
         status: _status || IncidentStatus.OPEN,
         title: body.incident_title || `Incident for monitor ${monitor.name}`,
@@ -92,7 +126,23 @@ export async function POST(request: Request) {
         statusPage: {
           connect: { id: monitor.statusPageId },
         },
+        Updates: {
+          create: {
+            id: crypto.randomUUID(),
+            message: body.incident_description || "Incident created",
+            status: _status || IncidentStatus.OPEN,
+            updateBy: {
+              connect: {
+                id: process.env.HETRIXTOOLS_USER_ID || "",
+              },
+            },
+          },
+        },
       },
+    });
+    await prisma.monitor.update({
+      where: { id: monitor.id },
+      data: { status: _status == IncidentStatus.OPEN ? MonitorStatus.DOWN : MonitorStatus.UP },
     });
   }
   return new Response("Incident processed", { status: 200 });

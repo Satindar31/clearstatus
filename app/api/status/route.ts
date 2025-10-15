@@ -26,16 +26,6 @@ export async function GET(_req: NextRequest) {
       status: 404,
     });
   }
-  /* 
-    const components = [
-    { id: "api", name: "Public API", status: "operational", uptime30d: 99.98, responseMs: 142 },
-    { id: "gateway", name: "Gateway", status: "operational", uptime30d: 99.92, responseMs: 88 },
-    { id: "realtime", name: "Realtime Service", status: "degraded", uptime30d: 99.2, responseMs: 260 },
-    { id: "db", name: "Primary Database", status: "operational", uptime30d: 99.99, responseMs: 12 },
-    { id: "cdn", name: "CDN", status: "operational", uptime30d: 99.97, responseMs: 34 },
-    { id: "auth", name: "Auth", status: "operational", uptime30d: 99.95, responseMs: 65 },
-  ] as const
-   */
 
   const inc = await prisma.incident.findMany({
     where: {
@@ -43,6 +33,13 @@ export async function GET(_req: NextRequest) {
         slug
       }
     },
+    include: {
+      Updates: true
+    },
+    
+    orderBy: {
+      createdAt: "desc"
+    }
   });
 
 

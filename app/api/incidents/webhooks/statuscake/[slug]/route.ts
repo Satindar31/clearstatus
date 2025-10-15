@@ -12,7 +12,9 @@ export async function POST(request: Request) {
   const statusCode = params.get("StatusCode");
   // Generate a unique incident id for each event
   // Use TestID, Status, StatusCode, and timestamp for uniqueness
-  const eventId = `${testId || ""}_${status || ""}_${statusCode || ""}_${Date.now()}`;
+  const eventId = `${testId || ""}_${status || ""}_${
+    statusCode || ""
+  }_${Date.now()}`;
   // Extract slug from request URL (last string after last '/')
   const slug = request.url.split("/").pop();
   let _status;
@@ -26,12 +28,7 @@ export async function POST(request: Request) {
     return new Response("Event not handled", { status: 200 });
   }
 
-  console.log(
-    "Received webhook for slug:",
-    slug,
-    "with status:",
-    status
-  );
+  console.log("Received webhook for slug:", slug, "with status:", status);
   if (!slug) {
     return new Response("Missing slug", { status: 400 });
   }
@@ -71,6 +68,18 @@ export async function POST(request: Request) {
               data: { status: MonitorStatus.UP },
             },
           },
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message: `Monitor ${monitor.name} is back up (StatusCode: ${statusCode})`,
+              status: IncidentStatus.RESOLVED,
+              updateBy: {
+                connect: {
+                  id: process.env.STATUSCAKE_USER_ID || "",
+                },
+              },
+            },
+          },
         },
       });
     }
@@ -85,6 +94,18 @@ export async function POST(request: Request) {
             update: {
               where: { id: monitor.id },
               data: { status: MonitorStatus.DOWN },
+            },
+          },
+          Updates: {
+            create: {
+              id: crypto.randomUUID(),
+              message: `Monitor ${monitor.name} is down (StatusCode: ${statusCode})`,
+              status: IncidentStatus.OPEN,
+              updateBy: {
+                connect: {
+                  id: process.env.STATUSCAKE_USER_ID || "",
+                },
+              },
             },
           },
         },
@@ -108,6 +129,30 @@ export async function POST(request: Request) {
         statusPage: {
           connect: { id: monitor.statusPageId },
         },
+        Updates: {
+          create: {
+            id: crypto.randomUUID(),
+            message:
+              _status == IncidentStatus.OPEN
+                ? `Monitor ${monitor.name} is down (StatusCode: ${statusCode})`
+                : `Monitor ${monitor.name} is back up (StatusCode: ${statusCode})`,
+            status: _status || IncidentStatus.OPEN,
+            updateBy: {
+              connect: {
+                id: process.env.STATUSCAKE_USER_ID || "",
+              },
+            },
+          },
+        },
+      },
+    });
+    await prisma.monitor.update({
+      where: { id: monitor.id },
+      data: {
+        status:
+          _status == IncidentStatus.OPEN
+            ? MonitorStatus.DOWN
+            : MonitorStatus.UP,
       },
     });
   }

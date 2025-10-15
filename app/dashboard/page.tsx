@@ -7,6 +7,7 @@ import { Plus, Activity, LogOut, LayoutDashboard } from "lucide-react";
 import { StatusPageManager } from "@/components/dashboard/StatusPageManager";
 import { CreateStatusPage } from "@/components/dashboard/CreateStatusPage";
 import type { User } from "better-auth";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
 
@@ -19,6 +20,8 @@ export default function Dashboard() {
     isPending, //loading state
   } = authClient.useSession();
   const [user, setUser] = useState<User | null>();
+  
+  const router = useRouter()
 
   useEffect(() => {
     loadStatusPages();
@@ -37,6 +40,9 @@ export default function Dashboard() {
         } else {
           setStatusPages([]);
           setLoading(false);
+          if(res.status == 401) {
+            router.push("/login")
+          }
         }
       })
       .catch((err) => {

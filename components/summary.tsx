@@ -1,24 +1,25 @@
+import { StatusPageStatus } from "@/generated/prisma/enums"
 import { cn } from "@/lib/utils"
 
 type Props = {
   loading?: boolean
   error?: boolean
-  overallStatus?: "operational" | "degraded" | "partial_outage" | "major_outage" | "maintenance"
+  overallStatus?: StatusPageStatus
   updatedAt?: string
   avgResponseMs?: number
 }
 
 function statusLabel(s?: Props["overallStatus"]) {
   switch (s) {
-    case "operational":
+    case "ALL_OPERATIONAL":
       return "All systems operational"
-    case "degraded":
+    case "DEGRADED_PERFORMANCE":
       return "Degraded performance"
-    case "partial_outage":
+    case "PARTIAL_OUTAGE":
       return "Partial outage"
-    case "major_outage":
-      return "Major outage"
-    case "maintenance":
+    case "MAJOR_OUTAGE":
+      return "Some systems are down"
+    case "MAINTENANCE":
       return "Scheduled maintenance"
     default:
       return "Loading status…"
@@ -28,15 +29,15 @@ function statusLabel(s?: Props["overallStatus"]) {
 function statusColorVars(s?: Props["overallStatus"]) {
   // Use design tokens, avoid raw colors
   switch (s) {
-    case "operational":
+    case "ALL_OPERATIONAL":
       return { bg: "var(--color-chart-2)", text: "var(--color-sidebar-primary-foreground)" }
-    case "degraded":
+    case "DEGRADED_PERFORMANCE":
       return { bg: "var(--color-chart-5)", text: "var(--color-sidebar-primary-foreground)" }
-    case "partial_outage":
+    case "PARTIAL_OUTAGE":
       return { bg: "var(--color-chart-4)", text: "var(--color-sidebar-primary-foreground)" }
-    case "major_outage":
+    case "MAJOR_OUTAGE":
       return { bg: "var(--color-destructive)", text: "var(--color-destructive-foreground)" }
-    case "maintenance":
+    case "MAINTENANCE":
       return { bg: "var(--color-muted)", text: "var(--color-muted-foreground)" }
     default:
       return { bg: "var(--color-muted)", text: "var(--color-muted-foreground)" }
