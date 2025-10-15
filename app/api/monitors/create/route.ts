@@ -46,8 +46,7 @@ export async function POST(request: Request) {
           },
         },
         uptimeChecker: monitorType.toUpperCase() as UptimeChecker,
-
-        // TODO visible
+        isVisible: isVisible,
       },
     });
     return new Response(JSON.stringify(monitor), { status: 201 });

@@ -8,7 +8,9 @@ import { Summary } from "./summary"
 import { ComponentsHealth } from "./components-health"
 import { IncidentTimeline } from "./incident-timeline"
 import { UptimeChart } from "./uptime-chart"
-import { MonitorStatus } from "@/generated/prisma/enums"
+import { IncidentSeverity, IncidentStatus, MonitorStatus } from "@/generated/prisma/enums"
+import { useEffect } from "react"
+import { Incident } from "@/generated/prisma/client"
 
 type ComponentStatus = "operational" | "degraded" | "partial_outage" | "major_outage" | "maintenance"
 
@@ -22,16 +24,7 @@ export type StatusAPI = {
     uptime30d: number
     responseMs?: number
   }>
-  incidents: Array<{
-    id: string
-    title: string
-    severity: "minor" | "major" | "critical" | "maintenance"
-    status: "investigating" | "identified" | "monitoring" | "resolved"
-    startedAt: string
-    resolvedAt?: string
-    updates: Array<{ at: string; message: string }>
-    affectedComponents: string[]
-  }>
+  inc: Incident[]
   dailyUptime: Array<{ date: string; uptime: number }>
 }
 
@@ -110,7 +103,7 @@ export function StatusDashboard({ slug }: { slug: string }) {
             <CardTitle className="text-base">Incident Timeline</CardTitle>
           </CardHeader>
           <CardContent>
-            <IncidentTimeline items={data?.incidents || []} loading={isLoading} />
+            <IncidentTimeline items={data?.inc || []} loading={isLoading} />
           </CardContent>
         </Card>
       </div>

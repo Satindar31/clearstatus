@@ -1,23 +1,25 @@
-import { Fragment } from "react"
+import { Incident } from "@/generated/prisma/client";
+import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
+import { Fragment } from "react";
 
-type Item = {
-  id: string
-  title: string
-  severity: "minor" | "major" | "critical" | "maintenance"
-  status: "investigating" | "identified" | "monitoring" | "resolved"
-  startedAt: string
-  resolvedAt?: string
-  updates: Array<{ at: string; message: string }>
-  affectedComponents: string[]
-}
 
-export function IncidentTimeline({ items, loading }: { items: Item[]; loading?: boolean }) {
+export function IncidentTimeline({
+  items,
+  loading,
+}: {
+  items: Incident[];
+  loading?: boolean;
+}) {
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading incidents…</p>
+    return <p className="text-sm text-muted-foreground">Loading incidents…</p>;
   }
 
   if (!items.length) {
-    return <p className="text-sm text-muted-foreground">No incidents in the past 30 days.</p>
+    return (
+      <p className="text-sm text-muted-foreground">
+        No incidents in the past 30 days.
+      </p>
+    );
   }
 
   return (
@@ -38,19 +40,23 @@ export function IncidentTimeline({ items, loading }: { items: Item[]; loading?: 
               <h3 className="text-sm font-medium">{inc.title}</h3>
             </div>
             <div className="text-xs text-muted-foreground">
-              <time dateTime={inc.startedAt}>{new Date(inc.startedAt).toLocaleString()}</time>
+              <time dateTime={new Date(inc.createdAt).toISOString()}>
+                {new Date(inc.createdAt).toLocaleString()}
+              </time>
               {inc.resolvedAt && (
                 <Fragment>
                   {" — "}
-                  <time dateTime={inc.resolvedAt}>{new Date(inc.resolvedAt).toLocaleString()}</time>
+                  <time dateTime={new Date(inc.resolvedAt).toISOString()}>
+                    {new Date(inc.resolvedAt).toLocaleString()}
+                  </time>
                 </Fragment>
               )}
             </div>
           </div>
 
-          <div className="mt-2 text-xs text-muted-foreground">Affected: {inc.affectedComponents.join(", ")}</div>
+          {/* <div className="mt-2 text-xs text-muted-foreground">Affected: {inc.affectedComponents.join(", ")}</div> */}
 
-          <div className="mt-3 space-y-2">
+          {/* <div className="mt-3 space-y-2">
             {inc.updates.map((u, idx) => (
               <div key={idx} className="flex items-start gap-3">
                 <span
@@ -65,46 +71,48 @@ export function IncidentTimeline({ items, loading }: { items: Item[]; loading?: 
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </li>
       ))}
     </ol>
-  )
+  );
 }
 
-function bgFor(sev: Item["severity"]) {
-  switch (sev) {
+function bgFor(sev: Incident["severity"]) {
+  switch (sev.toLocaleLowerCase()) {
     case "critical":
-      return "var(--color-destructive)"
+      return "var(--color-destructive)";
     case "major":
-      return "var(--color-chart-4)"
+      return "var(--color-chart-4)";
     case "minor":
-      return "var(--color-chart-5)"
-    case "maintenance":
-      return "var(--color-muted)"
+      return "var(--color-chart-5)";
+    //   case "maintenance":
+    //     return "var(--color-muted)"
+    // }
   }
 }
-function fgFor(sev: Item["severity"]) {
-  switch (sev) {
+
+function fgFor(sev: Incident["severity"]) {
+  switch (sev.toLocaleLowerCase()) {
     case "critical":
-      return "var(--color-destructive-foreground)"
+      return "var(--color-destructive-foreground)";
     case "major":
-      return "var(--color-sidebar-primary-foreground)"
+      return "var(--color-sidebar-primary-foreground)";
     case "minor":
-      return "var(--color-sidebar-primary-foreground)"
+      return "var(--color-sidebar-primary-foreground)";
     case "maintenance":
-      return "var(--color-muted-foreground)"
+      return "var(--color-muted-foreground)";
   }
 }
-function dotFor(status: Item["status"]) {
-  switch (status) {
+function dotFor(status: Incident["status"]) {
+  switch (status.toLocaleLowerCase()) {
     case "resolved":
-      return "var(--color-chart-2)"
+      return "var(--color-chart-2)";
     case "monitoring":
-      return "var(--color-chart-5)"
+      return "var(--color-chart-5)";
     case "identified":
-      return "var(--color-chart-4)"
+      return "var(--color-chart-4)";
     case "investigating":
-      return "var(--color-primary)"
+      return "var(--color-primary)";
   }
 }

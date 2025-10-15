@@ -25,7 +25,6 @@ export function ComponentsHealth({ items, loading }: { items: Item[]; loading?: 
       </div>
     )
   }
-  console.log(items)
 
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

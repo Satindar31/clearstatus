@@ -3,11 +3,6 @@ import type { NextRequest } from "next/server";
 
 export async function GET(_req: NextRequest) {
   const now = new Date();
-  const d = (days: number) => {
-    const dt = new Date(now);
-    dt.setDate(dt.getDate() - days);
-    return dt.toISOString();
-  };
 
   const url = _req.url;
   const slug = new URL(url).searchParams.get("slug");
@@ -42,56 +37,14 @@ export async function GET(_req: NextRequest) {
   ] as const
    */
 
-  const inc = prisma.incident.findMany({
+  const inc = await prisma.incident.findMany({
     where: {
-      statusPageId:
-        components.length > 0 ? components[0].statusPageId : undefined,
+      statusPage: {
+        slug
+      }
     },
   });
 
-  const incidents = [
-    {
-      id: "inc-1",
-      title: "Elevated error rates in Realtime Service",
-      severity: "major",
-      status: "resolved",
-      startedAt: d(3),
-      resolvedAt: d(2),
-      affectedComponents: ["Realtime Service"],
-      updates: [
-        {
-          at: d(3),
-          message:
-            "Investigating elevated error rates impacting realtime updates.",
-        },
-        {
-          at: d(3),
-          message: "Identified a bad deploy causing intermittent disconnects.",
-        },
-        { at: d(2), message: "Rolled back deploy, monitoring recovery." },
-        {
-          at: d(2),
-          message: "Resolved. Root cause: regression in connection pooler.",
-        },
-      ],
-    },
-    {
-      id: "inc-2",
-      title: "Scheduled database maintenance",
-      severity: "maintenance",
-      status: "resolved",
-      startedAt: d(7),
-      resolvedAt: d(7),
-      affectedComponents: ["Primary Database"],
-      updates: [
-        {
-          at: d(7),
-          message: "Maintenance started, minor write delays expected.",
-        },
-        { at: d(7), message: "Maintenance completed successfully." },
-      ],
-    },
-  ];
 
   // Generate 30 days of uptime around 99.5-100
   const dailyUptime = Array.from({ length: 30 }).map((_, i) => {
