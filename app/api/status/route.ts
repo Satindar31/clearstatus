@@ -34,7 +34,9 @@ export async function GET(_req: NextRequest) {
       }
     },
     include: {
-      Updates: true
+      Updates: {
+        orderBy: { createdAt: "desc" }
+      }
     },
     
     orderBy: {
@@ -53,16 +55,18 @@ export async function GET(_req: NextRequest) {
 
   // Overall status is the worst component status
   const rank: Record<string, number> = {
-    operational: 0,
-    maintenance: 1,
-    degraded: 2,
-    partial_outage: 3,
-    major_outage: 4,
+    ALL_OPERATIONAL: 0,
+    MAINTAINENCE: 1,
+    DEGRADED: 2,
+    PARTIAL_OUTAGE: 3,
+    MAJOR_OUTAGE: 4,
   };
   const overall = (components as any[]).reduce(
     (acc, c) => (rank[c.status] > rank[acc] ? c.status : acc),
-    "operational"
+    "ALL_OPERATIONAL"
   );
+
+  console.log(components)
 
   return Response.json({
     status: overall,

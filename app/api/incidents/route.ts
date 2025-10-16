@@ -2,7 +2,7 @@ import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth"; // path to your Better Auth server instance
 import { headers } from "next/headers";
-import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
+import { IncidentSeverity, IncidentStatus, MonitorStatus } from "@/generated/prisma/enums";
 export async function POST(request: Request) {
   const {
     title,
@@ -58,7 +58,19 @@ export async function POST(request: Request) {
           },
         },
       },
+      include: {
+        monitors: true,
+      }
     });
+
+    await prisma.monitor.update({
+      where: {
+        id: newIncident.monitors[0].id
+      },
+      data: {
+        status: severity.toUpperCase() === "MAJOR" || severity.toUpperCase() === "CRITICAL" ? "DOWN" : "DEGRADED" as MonitorStatus
+      }
+    })
 
     return NextResponse.json(newIncident, { status: 201 });
   } catch (error) {
