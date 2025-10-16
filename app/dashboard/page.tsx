@@ -20,6 +20,7 @@ export default function Dashboard() {
     isPending, //loading state
   } = authClient.useSession();
   const [user, setUser] = useState<User | null>();
+  const [checkers, setCheckers] = useState<string[]>([]);
   
   const router = useRouter()
 
@@ -28,6 +29,7 @@ export default function Dashboard() {
     if (isPending == false) {
       setUser(session?.user ?? null);
     }
+    loadEnabledCheckers();
   }, [isPending, statusPages.length]);
 
   const loadStatusPages = async () => {
@@ -51,6 +53,18 @@ export default function Dashboard() {
         setLoading(false);
       });
   };
+  function loadEnabledCheckers() {
+    fetch("/api/config/allowedCheckers")
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json();
+          setCheckers(data.checkers);
+        }
+      })
+      .catch((err) => {
+        console.error("Error loading allowed checkers:", err);
+      });
+  }
   const handlePageCreated = (page: {
     id: string;
     title: string;
@@ -85,6 +99,7 @@ export default function Dashboard() {
   if (selectedPage) {
     return (
       <StatusPageManager
+        checkers={checkers}
         statusPage={selectedPage}
         onBack={() => setSelectedPage(null)}
       />

@@ -16,11 +16,13 @@ import { CreateIncident } from "./CreateIncident";
 interface StatusPageManagerProps {
   statusPage: StatusPage;
   onBack: () => void;
+  checkers: string[];
 }
 
 export function StatusPageManager({
   statusPage,
   onBack,
+  checkers,
 }: StatusPageManagerProps) {
   const [activeTab, setActiveTab] = useState<
     "monitors" | "incidents" | "settings"
@@ -188,6 +190,7 @@ export function StatusPageManager({
                 </div>
                 {showCreateMonitor ? (
                   <CreateMonitor
+                  checkers={checkers}
                     statusPageId={statusPage.id}
                     onCancel={() => setShowCreateMonitor(false)}
                     onCreated={(monitor) =>

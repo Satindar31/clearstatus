@@ -7,12 +7,14 @@ interface CreateMonitorProps {
   statusPageId: string;
   onCancel: () => void;
   onCreated: (monitor: Monitor) => void;
+  checkers: string[];
 }
 
 export function CreateMonitor({
   statusPageId,
   onCancel,
   onCreated,
+  checkers,
 }: CreateMonitorProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -154,10 +156,12 @@ export function CreateMonitor({
               onChange={(e) => setMonitorType(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
             >
-              <option value="hetrixtools">Hetrixtools</option>
-              <option value="updown">Updown.io</option>
-              <option value="statuscake">StatusCake</option>
-              {/* <option value="statuspage">StatusPage</option> */}
+              {checkers.map((checker) => (
+                <option key={checker} value={checker.toLowerCase()}>
+                  {checker.charAt(0).toUpperCase() +
+                    checker.slice(1).toLowerCase()}
+                </option>
+              ))}
             </select>
           </div>
 
