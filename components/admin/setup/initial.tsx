@@ -1,41 +1,53 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
 export default function InitialSetup() {
   const [useEmail, setUseEmail] = React.useState(true);
   const [allowedCheckers, setAllowedCheckers] = React.useState<string[]>([]);
+  const router = useRouter();
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log("Submitting setup", { useEmail, allowedCheckers });
-    if(allowedCheckers.length === 0) {
+    if (allowedCheckers.length === 0) {
       toast.error("Please select at least one allowed checker.");
       return;
     }
     console.log({ useEmail, allowedCheckers });
-    fetch("/api/config/setup", {
+    const setupFetch = fetch("/api/config/setup", {
       method: "POST",
       body: JSON.stringify({
         setupEmail: useEmail,
         allowedCheckers,
       }),
       cache: "no-store",
-    }).then(async (res) => {
-      if (res.ok) {
-        toast.success(
-          "Initial setup completed. Please refresh the page if it automatically does not happen."
-        );
-      }
+    }).catch((err) => {
+      console.error("Error during setup:", err);
+      throw err;
+    });
+
+    toast.promise(setupFetch, {
+      loading: "Saving settings...",
+      success: (data) => {
+        router.push("/admin/dashboard");
+        return "Settings saved successfully!";
+      },
+      error: "Failed to save settings. Please try again.",
     });
   }
 
   return (
-    <form className="flex flex-col gap-4 border border-slate-100 rounded-md p-4" onSubmit={(e) => handleSubmit(e)}>
+    <form
+      className="flex flex-col gap-4 border border-slate-100 rounded-md p-4"
+      onSubmit={(e) => handleSubmit(e)}
+    >
       <label>
         Use Email:
         <Switch checked={useEmail} onCheckedChange={setUseEmail} />
