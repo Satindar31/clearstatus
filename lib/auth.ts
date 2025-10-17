@@ -2,28 +2,50 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { passkey } from "better-auth/plugins/passkey";
 import { organization } from "better-auth/plugins";
-import { haveIBeenPwned } from "better-auth/plugins"
-import { twoFactor } from "better-auth/plugins"
+import { haveIBeenPwned } from "better-auth/plugins";
+import { twoFactor } from "better-auth/plugins";
+import prisma from "@/prisma/prisma";
+import { get } from "@vercel/edge-config";
+import { render } from "@react-email/components";
+import { createElement } from "react";
+import { ResetPasswordEmail } from "@/emails/passwordReset";
+import { transporter } from "./mail";
 
-// If your Prisma file is located elsewhere, you can change the path
-import { PrismaClient } from "@/generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-const prisma = new PrismaClient({ adapter });
 export const auth = betterAuth({
-    appName: "ClearStatus",
-
+  appName: "ClearStatus",
   emailAndPassword: {
     enabled: true,
     async sendResetPassword(data, request) {
-      // Send an email to the user with a link to reset their password
+      const useMail = await get("use-email");
+      if (useMail == "false") {
+        return;
+      }
+      const mailFrom = await get("mail-from");
+      const from =
+        typeof mailFrom === "string" && mailFrom.length > 0
+          ? mailFrom
+          : undefined;
+      const emailHtml = await render(
+        createElement(ResetPasswordEmail, {
+          userFirstname: data.user.name.split(" ")[0],
+          resetPasswordLink: data.url,
+        })
+      );
+
+      const options = {
+        from,
+        to: data.user.email,
+        subject: "Password Reset Request",
+        html: emailHtml,
+      };
+
+      await transporter.sendMail(options);
     },
   },
   socialProviders: {
     google: {
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -38,7 +60,7 @@ export const auth = betterAuth({
     //     clientSecret: process.env.LINEAR_CLIENT_SECRET!
     // }
   },
-  plugins: [passkey(), organization(), haveIBeenPwned(), twoFactor() ],
+  plugins: [passkey(), organization(), haveIBeenPwned(), twoFactor()],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),

@@ -15,6 +15,7 @@ export function LoginForm({
 }: React.ComponentProps<"form">) {
 
 const [loading, setLoading] = React.useState(false);
+const [email, setEmail] = React.useState("");
 
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -47,7 +48,6 @@ const [loading, setLoading] = React.useState(false);
       return;
     }
     // Email/password login
-    const email = formData.get("email");
     const password = formData.get("password");
     if (!email || !password || Array.isArray(email) || Array.isArray(password)) {
       toast.error("Email and password are required");
@@ -55,7 +55,7 @@ const [loading, setLoading] = React.useState(false);
       throw new Error("Email and password required");
     }
     authClient.signIn.email({
-      email: email.toString(),
+      email: email,
       password: password.toString(),
       callbackURL: "/dashboard",
       fetchOptions: {
@@ -90,12 +90,18 @@ const [loading, setLoading] = React.useState(false);
             name="email"
             type="email"
             placeholder="m@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            <p className="ml-auto text-sm underline-offset-4 hover:underline">
+            <p onClick={() => {
+              authClient.requestPasswordReset({
+                email: email,
+              })
+            }} className="ml-auto text-sm underline-offset-4 hover:underline">
               Forgot your password?
             </p>
           </div>
