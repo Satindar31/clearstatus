@@ -8,19 +8,25 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+
+type ResetPasswordFormProps = React.ComponentProps<"form"> & {
+	pageParams?: { token?: string | string[] };
+};
 
 export function ResetPasswordForm({
 	className,
+	pageParams,
 	...props
-}: React.ComponentProps<"form">) {
+}: ResetPasswordFormProps) {
 	const [loading, setLoading] = React.useState(false);
 	const [password1, setPassword1] = React.useState("");
 	const [password2, setPassword2] = React.useState("");
 
 	const router = useRouter();
-	const pathname = usePathname()
-	const token = new URLSearchParams(`${process.env.BASE_URL}${pathname}`).get("token");
+	const params = useParams();
+	const token = pageParams?.token || params?.token;
+	console.log(pageParams)
 	if (!token) {
 		toast.error("Invalid or missing token");
 		return null;
