@@ -104,4 +104,15 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
+
+	rateLimit: {
+		storage: "database",
+		modelName: "rateLimit",
+		customRules: {
+			"/send-verification-email": {
+				window: 15 * 60, // 15 minutes
+				max: 5, // limit each IP to 5 requests per window
+			}
+		}
+	},
 });
