@@ -63,6 +63,15 @@ const [email, setEmail] = React.useState("");
           window.location.href = "/dashboard";
         },
         onError: (ctx: { error: { message: any } }) => {
+          if(ctx.error.message === "Email not verified") {
+            toast.error("Please verify your email before logging in.");
+            authClient.sendVerificationEmail({
+              email: email,
+              callbackURL: window.location.origin + "/dashboard",
+            })
+            setLoading(false);
+            return;
+          }
           toast.error(ctx.error.message);
           setLoading(false);
         },

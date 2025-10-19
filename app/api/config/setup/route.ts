@@ -13,7 +13,8 @@ export async function POST(req: NextRequest) {
   const {
     setupEmail,
     allowedCheckers,
-  }: { setupEmail: boolean; allowedCheckers: string[] } = await req.json();
+    allowRegistrations
+  }: { setupEmail: boolean; allowedCheckers: string[]; allowRegistrations: boolean } = await req.json();
   const setupData: setupDataT = { items: [] };
   console.log("Setup request received", { setupEmail, allowedCheckers });
   if (!allowedCheckers || allowedCheckers.length === 0) {
@@ -38,6 +39,11 @@ export async function POST(req: NextRequest) {
   setupData.items.push({
     key: "allowed-checkers",
     value: allowedCheckers.join("###"),
+    operation: "create",
+  });
+  setupData.items.push({
+    key: "allow-registrations",
+    value: allowRegistrations.valueOf().toString(),
     operation: "create",
   });
   console.log("Setup data to be sent to edge config", setupData);

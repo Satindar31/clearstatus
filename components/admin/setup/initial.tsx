@@ -11,6 +11,7 @@ import { toast } from "sonner";
 export default function InitialSetup() {
   const [useEmail, setUseEmail] = React.useState(true);
   const [allowedCheckers, setAllowedCheckers] = React.useState<string[]>([]);
+  const [allowRegistrations, setAllowRegistrations] = React.useState(false);
   const router = useRouter();
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -26,6 +27,7 @@ export default function InitialSetup() {
       body: JSON.stringify({
         setupEmail: useEmail,
         allowedCheckers,
+        allowRegistrations
       }),
       cache: "no-store",
     }).catch((err) => {
@@ -101,6 +103,12 @@ export default function InitialSetup() {
             }}
           />
         </div>
+      </div>
+      <div className="flex flex-row items-center gap-2">
+      <Label>
+        Enable registrations?
+      </Label>
+      <Switch checked={allowRegistrations} onCheckedChange={setAllowRegistrations} />
       </div>
 
       <Button type="submit">Save</Button>
