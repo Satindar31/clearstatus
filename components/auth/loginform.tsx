@@ -100,8 +100,9 @@ const [email, setEmail] = React.useState("");
             <p onClick={() => {
               authClient.requestPasswordReset({
                 email: email,
+                redirectTo: window.location.origin + "/reset-password",
               }).then(res => {
-                res.data?.status ? toast.success(res.data.message) : toast.error(res.data?.message || "Error requesting password reset");
+                res.data?.status ? toast.success(res.data.message) : toast.error(res.data?.message || "Error requesting password reset. Make sure to input your email address in the email field.");
               })
             }} className="ml-auto text-sm underline-offset-4 hover:underline">
               Forgot your password?

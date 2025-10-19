@@ -66,8 +66,6 @@ export async function GET(_req: NextRequest) {
     "ALL_OPERATIONAL"
   );
 
-  console.log(components)
-
   return Response.json({
     status: overall,
     updatedAt: now.toISOString(),

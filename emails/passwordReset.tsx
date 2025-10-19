@@ -29,7 +29,7 @@ export function ResetPasswordEmail({
         <Preview>Reset your password for {process.env.APP_NAME!}</Preview>
         <Container style={container}>
           <Img
-            src={`${baseUrl}/logos/png/logo only transparent bg.png`}
+            src={`${baseUrl}/logos/png/logo only white transparent bg.png`}
             width="40"
             height="33"
             alt={process.env.APP_NAME!}
