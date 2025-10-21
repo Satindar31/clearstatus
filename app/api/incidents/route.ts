@@ -63,14 +63,16 @@ export async function POST(request: Request) {
       }
     });
 
-    await prisma.monitor.update({
-      where: {
-        id: newIncident.monitors[0].id
-      },
-      data: {
-        status: severity.toUpperCase() === "MAJOR" || severity.toUpperCase() === "CRITICAL" ? "DOWN" : "DEGRADED" as MonitorStatus
-      }
-    })
+    // TODO manually created incidents are not yet linked to monitors
+
+    // await prisma.monitor.update({
+    //   where: {
+    //     id: newIncident.monitors[0].id
+    //   },
+    //   data: {
+    //     status: severity.toUpperCase() === "MAJOR" || severity.toUpperCase() === "CRITICAL" ? "DOWN" : "DEGRADED" as MonitorStatus
+    //   }
+    // })
 
     return NextResponse.json(newIncident, { status: 201 });
   } catch (error) {
