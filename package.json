@@ -10,7 +10,10 @@
     "format": "biome format --write",
     "email:build": "email build",
     "email:dev": "email dev",
-    "email:export": "email export"
+    "email:export": "email export",
+
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
