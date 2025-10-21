@@ -134,8 +134,8 @@ export async function POST(request: Request) {
             id: crypto.randomUUID(),
             message:
               _status == IncidentStatus.OPEN
-                ? `Monitor ${monitor.name} is down (StatusCode: ${statusCode})`
-                : `Monitor ${monitor.name} is back up (StatusCode: ${statusCode})`,
+                ? `Monitor ${monitor.name} is down (StatusCode: ${statusCode}) (automated)`
+                : `Monitor ${monitor.name} is back up (StatusCode: ${statusCode}) (automated)`,
             status: _status || IncidentStatus.OPEN,
             updateBy: {
               connect: {

@@ -63,7 +63,7 @@ export async function POST(request: Request) {
               id: crypto.randomUUID(),
               message:
                 body.incident_description ||
-                "Incident resolved: monitor is back online",
+                "Incident resolved: monitor is back online (automated)",
               status: IncidentStatus.RESOLVED,
               updateBy: {
                 connect: {
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
               id: crypto.randomUUID(),
               message:
                 body.incident_description ||
-                "Incident updated: monitor is still down",
+                "Incident updated: monitor is still down (automated)",
               status: IncidentStatus.OPEN,
               updateBy: {
                 connect: {
