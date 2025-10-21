@@ -6,13 +6,13 @@ import { IncidentSeverity, IncidentStatus, MonitorStatus } from "@/generated/pri
 export async function POST(request: Request) {
   const {
     title,
-    status_page_id,
+    statusPageId,
     description,
     status,
     severity,
   }: {
     title: string;
-    status_page_id: string;
+    statusPageId: string;
     description: string;
     status: string;
     severity: string;
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         severity: severity.toUpperCase() as IncidentSeverity,
         statusPage: {
           connect: {
-            id: status_page_id,
+            id: statusPageId,
           },
         },
         Updates: {

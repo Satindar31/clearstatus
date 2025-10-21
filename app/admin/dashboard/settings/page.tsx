@@ -1,18 +1,20 @@
-import MailSettings from "@/components/admin/setup/mailsettings";
+import { MailSettings } from "@/components/admin/setup/mailsettings"
 
 export default function SettingsPage() {
   return (
-    <div className="container mx-auto p-4 h-screen">
-      <h1 className="text-3xl font-bold mb-4">Settings</h1>
-      <p className="text-muted-foreground">
-        This is where the settings will go.
-      </p>
-      <div className="mt-4">
-        <MailSettings />
-        <p className="text-sm text-muted-foreground">
-          No settings available yet.
-        </p>
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">Settings</h1>
+          <p className="mt-2 text-lg text-muted-foreground">Configure your email providers and notification settings</p>
+        </div>
+
+        {/* Settings Sections */}
+        <div className="space-y-8">
+          <MailSettings />
+        </div>
       </div>
-    </div>
-  );
+    </main>
+  )
 }
