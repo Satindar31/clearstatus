@@ -56,7 +56,7 @@ export function CreateMonitor({
           if (res.ok) {
             const webhook = await res.json();
             toast.success(
-              "Monitor and webhook created successfully. Use this webhook URL in Hetrixtools: " +
+              `Monitor and webhook created successfully. Use this webhook URL in ${webhook.uptimeChecker.toLowerCase()} : ` +
                 `${
                   process.env.NEXT_PUBLIC_BASE_URL
                 }/api/incidents/webhooks/${webhook.uptimeChecker.toLowerCase()}/${

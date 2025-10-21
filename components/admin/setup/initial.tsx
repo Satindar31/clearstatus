@@ -103,6 +103,24 @@ export default function InitialSetup() {
             }}
           />
         </div>
+
+         <div className="flex flex-row gap-2">
+          <Label>Pingdom</Label>
+          <Checkbox
+            checked={allowedCheckers.includes("PINGDOM")}
+            onCheckedChange={(checked) => {
+              if (checked) {
+                setAllowedCheckers([...allowedCheckers, "PINGDOM"]);
+              } else {
+                setAllowedCheckers(
+                  allowedCheckers.filter((c) => c !== "PINGDOM")
+                );
+              }
+            }}
+          />
+        </div>
+
+
       </div>
       <div className="flex flex-row items-center gap-2">
       <Label>
