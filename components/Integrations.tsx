@@ -28,11 +28,11 @@ const integrations = [
   //     icon: <Globe className="w-8 h-8" />,
   //     description: 'Website performance and availability monitoring from multiple locations.'
   //   },
-    {
-      name: 'StatusCake',
-      icon: <Server className="w-8 h-8" />,
-      description: 'Automate incident creation/resolution using Updown.io.'
-    },
+    // {
+    //   name: 'StatusCake',
+    //   icon: <Server className="w-8 h-8" />,
+    //   description: 'Automate incident creation/resolution using Updown.io.'
+    // },
   {
     name: "Custom API",
     icon: <Cpu className="w-8 h-8" />,
