@@ -138,7 +138,7 @@ export default function Form({ slug }: { slug: string }) {
           type="submit"
           className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
         >
-          Create Incident
+          Update Incident
         </button>
       </div>
     </form>
