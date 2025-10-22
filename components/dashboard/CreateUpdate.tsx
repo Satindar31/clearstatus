@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
 import { toast } from "sonner";
-import { Updates } from "@/generated/prisma/client";
+import { Updates, User } from "@/generated/prisma/client";
 import { ScrollArea } from "../ui/scroll-area";
 import {
 	Tooltip,
@@ -13,6 +13,13 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatDistanceToNow } from "date-fns";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "../ui/dialog";
 
 export function Form({ slug }: { slug: string }) {
 	const router = useRouter();
@@ -60,7 +67,7 @@ export function Form({ slug }: { slug: string }) {
 		toast.promise(updateFetch, {
 			loading: "Sending request...",
 			success: (data) => {
-				// router.push("/dashboard");
+				router.refresh();
 				return "Incident updated successfully!";
 			},
 			error: "Failed to create update. Please try again.",
@@ -170,12 +177,76 @@ export function Form({ slug }: { slug: string }) {
 }
 
 export function PreviousUpdates({ updates }: { updates: Updates[] }) {
+	const [user, setUser] = React.useState<User | null>(null);
+
 	return (
 		<ScrollArea className="h-full">
 			<ul className="space-y-4">
 				{updates.map((update) => (
-					<li key={update.id} className="border-b pb-4">
-						<p className="text-gray-700">{update.message}</p>
+					<li
+						onClick={() => {
+							fetch(`/api/auth-d/user?userId=${update.updateById}`, {
+								cache: "default",
+								next: {
+									revalidate: 60 * 60 * 24, // 24 hours
+								},
+							}).then(async (res) => {
+								if (res.ok) {
+									const data = await res.json();
+									setUser(data);
+								}
+							});
+						}}
+						key={update.id}
+						className="border-b pb-4"
+					>
+						<Dialog>
+							<DialogTrigger>
+								<p className="text-gray-700">{update.message}</p>
+							</DialogTrigger>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>
+										Details for update ID:{" "}
+										<Tooltip defaultOpen={false}>
+											<TooltipTrigger
+												onClick={() =>
+													window.navigator.clipboard.writeText(update.id)
+												}
+											>
+												<span>{update.id}</span>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>Click to copy</p>
+											</TooltipContent>
+										</Tooltip>
+									</DialogTitle>
+								</DialogHeader>
+								<div className="mt-4">
+									<p className="whitespace-pre-wrap">{update.message}</p>
+									<p className="text-sm text-gray-500">
+										{formatDistanceToNow(new Date(update.createdAt), {
+											addSuffix: true,
+										})}
+									</p>
+									<p className="text-sm text-gray-500">
+										Exact time: {new Date(update.createdAt).toLocaleString()}
+									</p>
+									<p className="text-sm text-gray-500">
+										Update Status:{" "}
+										<span
+											className={`font-medium ${update.status === "RESOLVED" ? "text-green-600" : "text-yellow-600"}`}
+										>
+											{update.status}
+										</span>
+									</p>
+									<p className="text-sm text-gray-500">
+										Posted by: {user?.name ?? "Unknown"}
+									</p>
+								</div>
+							</DialogContent>
+						</Dialog>
+						<br />
 						<Tooltip>
 							<TooltipTrigger>
 								<p>

@@ -3,6 +3,7 @@ import { Monitor, Incident } from "@/types";
 
 import { toast } from "sonner";
 import { IncidentSeverity, IncidentStatus } from "@/generated/prisma/enums";
+import { makeId } from "@/hooks/id";
 
 interface CreateIncidentProps {
 	statusPageId: string;
@@ -27,7 +28,7 @@ export function CreateIncident({
 		setLoading(true);
 
 		const newIncident: Incident = {
-			id: crypto.randomUUID(),
+			id: makeId(8),
 			statusPageId: statusPageId,
 			title,
 			description,

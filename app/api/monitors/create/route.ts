@@ -1,5 +1,6 @@
 import prisma from "@/prisma/prisma";
 import { MonitorStatus, UptimeChecker } from "@/generated/prisma/enums";
+import { makeId } from "@/hooks/id";
 
 export async function POST(request: Request) {
   const {
@@ -56,13 +57,4 @@ export async function POST(request: Request) {
   }
 }
 
-export function makeId(length: number) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+

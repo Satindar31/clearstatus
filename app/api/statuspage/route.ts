@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidateTag } from "next/cache";
+import { makeId } from "@/hooks/id";
 
 export async function POST(request: Request) {
 	const { authorId, title, slug, published } = await request.json();
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
 			data: {
 				title,
 				slug,
-				id: crypto.randomUUID(),
+				id: makeId(8),
 				authorId,
 			},
 		});

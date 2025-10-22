@@ -7,6 +7,7 @@ import {
 	IncidentStatus,
 	MonitorStatus,
 } from "@/generated/prisma/enums";
+import { makeId } from "@/hooks/id";
 export async function POST(request: Request) {
 	const {
 		title,
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
 	try {
 		const newIncident = await prisma.incident.create({
 			data: {
-				id: crypto.randomUUID(),
+				id: makeId(8),
 				title,
 				status: status.toUpperCase() as IncidentStatus,
 				description,
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
 				},
 				Updates: {
 					create: {
-						id: crypto.randomUUID(),
+						id: makeId(8),
 						message: description,
 						status: status.toUpperCase() as IncidentStatus,
 						updateBy: {

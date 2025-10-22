@@ -1,4 +1,4 @@
-import { makeId } from "@/app/api/monitors/create/route";
+import { makeId } from "@/hooks/id";
 import { IncidentStatus, MonitorStatus } from "@/generated/prisma/enums";
 import prisma from "@/prisma/prisma";
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
           },
           Updates: {
             create: {
-              id: crypto.randomUUID(),
+              id: makeId(8),
               message:
                 body.incident_description ||
                 "Incident resolved: monitor is back online (automated)",
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
           status: IncidentStatus.OPEN,
           Updates: {
             create: {
-              id: crypto.randomUUID(),
+              id: makeId(8),
               message:
                 body.incident_description ||
                 "Incident updated: monitor is still down (automated)",
@@ -128,7 +128,7 @@ export async function POST(request: Request) {
         },
         Updates: {
           create: {
-            id: crypto.randomUUID(),
+            id: makeId(8),
             message: body.incident_description || "Incident created",
             status: _status || IncidentStatus.OPEN,
             updateBy: {

@@ -3,6 +3,7 @@ import { ArrowLeft, Activity } from "lucide-react";
 import { StatusPage } from "@/generated/prisma/client";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { makeId } from "@/hooks/id";
 
 interface CreateStatusPageProps {
 	onBack: () => void;
@@ -29,7 +30,7 @@ export function CreateStatusPage({ onBack, onCreated }: CreateStatusPageProps) {
 		e.preventDefault();
 		setLoading(true);
 		const newPage: StatusPage = {
-			id: crypto.randomUUID(),
+			id: makeId(8),
 			authorId: session?.user.id || "",
 			title: name,
 			slug,
