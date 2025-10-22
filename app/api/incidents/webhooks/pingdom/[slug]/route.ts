@@ -59,7 +59,8 @@ export async function POST(request: Request) {
 					Updates: {
 						create: {
 							id: makeId(8),
-							message: `Monitor ${monitor.name} is back up (automated)`,
+							title: `Monitor ${monitor.name} is back up (automated)`,
+							message: "",
 							status: IncidentStatus.RESOLVED,
 							updateBy: {
 								connect: {
@@ -87,12 +88,8 @@ export async function POST(request: Request) {
 					Updates: {
 						create: {
 							id: makeId(8),
-							message:
-								body.long_description ||
-								`Monitor ${monitor.name} is still down (StatusCode: ${error.substring(
-									0,
-									3,
-								)})`,
+							title: `Monitor ${monitor.name} is back up (automated)`,
+							message: "",
 							status: IncidentStatus.OPEN,
 						},
 					},
@@ -120,12 +117,8 @@ export async function POST(request: Request) {
 				Updates: {
 					create: {
 						id: makeId(8),
-						message:
-							body.incident_description ||
-							`Monitor ${monitor.name} is down (StatusCode: ${error.substring(
-								0,
-								3,
-							)})`,
+						title: `Monitor ${monitor.name} is back up (automated)`,
+						message: "",
 						status: _status || IncidentStatus.OPEN,
 						updateBy: {
 							connect: {

@@ -146,6 +146,7 @@ model Updates {
   id                String         @id
   incidentId        String
   incident          Incident       @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  title             String         @default("Incident Update")
   message           String
   status            IncidentStatus
   updateBy          User?          @relation(fields: [updateById], references: [id], onDelete: SetNull)

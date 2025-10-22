@@ -48,7 +48,8 @@ export async function POST(request: Request) {
 				Updates: {
 					create: {
 						id: makeId(8),
-						message: description,
+						title: description,
+						message: "",
 						status: status.toUpperCase() as IncidentStatus,
 						updateBy: {
 							connect: {

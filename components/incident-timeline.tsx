@@ -74,7 +74,7 @@ export function IncidentTimeline({
                   style={{ backgroundColor: dotFor(inc.status) }}
                 />
                 <div className="text-sm">
-                  <p className="leading-6">{u.message}</p>
+                  <p className="leading-6">{u.title}</p>
                   <time
                     className="text-xs text-muted-foreground"
                     dateTime={u.createdAt instanceof Date ? u.createdAt.toISOString() : u.createdAt}

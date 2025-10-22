@@ -70,6 +70,7 @@ export async function PUT(request: Request) {
 		const update = await prisma.updates.create({
 			data: {
 				id: makeId(8),
+				title,
 				message: description,
 				status: status,
 				incident: {
@@ -85,18 +86,7 @@ export async function PUT(request: Request) {
 				},
 			},
 		});
-		const userSess = await prisma.user.findUnique({
-			where: {
-				id: session?.user.id,
-			},
-		});
-		const userUpd = await prisma.user.findUnique({
-			where: {
-				id: update.updateById!,
-			},
-		});
-		console.log("User Sess:", userSess);
-		console.log("User Upd:", userUpd);
+
 		return new Response(JSON.stringify(update), {
 			status: 201,
 		});
