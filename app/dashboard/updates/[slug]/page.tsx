@@ -1,41 +1,51 @@
-import Form from "@/components/dashboard/CreateUpdate";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Form, PreviousUpdates } from "@/components/dashboard/CreateUpdate";
 import prisma from "@/prisma/prisma";
+import { Suspense } from "react";
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
+	params: {
+		slug: string;
+	};
 }
 
 export default async function UpdatesPage({ params }: PageProps) {
-  "use server"  
-  const { slug } = await params;
-  const updates = await prisma.updates.findMany({
-    where: {
-      incidentId: slug
-    }
-  })
+	"use server";
+	const { slug } = await params;
+	const updates = await prisma.updates.findMany({
+		where: {
+			incidentId: slug,
+		},
+		orderBy: {
+			createdAt: "desc",
+		},
+	});
 
+	return (
+		<div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+			<div className="max-w-7xl mx-auto">
+				<header className="mb-8 text-center">
+					<h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+						Post a new update
+					</h1>
+				</header>
 
-    return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-evenly">
-          <h1 className="text-6xl font-bold">Post a new update</h1>
-          <div className="grid grid-cols-2 gap-8 w-full max-w-4xl">
-            <Form slug={slug} />
-              
-            <ScrollArea className="rounded-xl p-8 border-2 border-slate-200">
-              <h2 className="text-2xl font-semibold mb-4">Existing Updates</h2>
-              <ul className="space-y-4 max-h-96 overflow-y-auto">
-                {updates.map((update) => (
-                  <li key={update.id} className="border-b pb-4">
-                    <p className="text-gray-700">{update.message}</p>
-                    <p className="text-sm text-gray-500 mt-2">Posted at: {new Date(update.createdAt).toLocaleString()}</p>
-                  </li>
-                ))}
-              </ul>
-            </ScrollArea>
-          </div>
-        </div>
-    )
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-start">
+					<div className="w-full">
+						<div className="rounded-xl p-6 h-full">
+							<Form slug={slug} />
+						</div>
+					</div>
+
+					<div className="w-full">
+						<div className="rounded-xl border-2 border-slate-200 p-6 flex flex-col">
+							<h2 className="text-2xl font-semibold mb-4">Existing Updates</h2>
+							<Suspense fallback={<div>Loading updates...</div>}>
+								<PreviousUpdates updates={updates} />
+							</Suspense>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
