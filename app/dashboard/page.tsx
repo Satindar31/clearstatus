@@ -8,6 +8,7 @@ import { StatusPageManager } from "@/components/dashboard/StatusPageManager";
 import { CreateStatusPage } from "@/components/dashboard/CreateStatusPage";
 import type { User } from "better-auth";
 import { useRouter } from "next/navigation";
+import UserButton from "@/components/auth/userButton";
 
 export default function Dashboard() {
 
@@ -124,7 +125,7 @@ export default function Dashboard() {
               <h1 className="text-xl font-bold text-slate-900">ClearStatus</h1>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-slate-600">{user?.email}</span>
+              <UserButton />
               <button
                 onClick={() =>
                   authClient.signOut({
