@@ -34,13 +34,7 @@ export default function Dashboard() {
   }, [isPending, statusPages.length]);
 
   const loadStatusPages = async () => {
-    fetch("/api/statuspage", {
-      cache: "force-cache",
-      next: {
-        revalidate: 60,
-        tags: ["statuspages"],
-      }
-    })
+    fetch("/api/statuspage")
       .then(async (res) => {
         if (res.ok) {
           const pages = await res.json();
