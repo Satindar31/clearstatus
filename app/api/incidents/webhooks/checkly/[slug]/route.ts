@@ -4,14 +4,13 @@ import prisma from "@/prisma/prisma";
 
 export async function POST(request: Request) {
 	const body = await request.json();
-	const error = body.long_description || "";
 	// Extract slug from request URL (last string after last '/')
 	const slug = request.url.split("/").pop();
 
 	let _status;
-	if (body.current_state == "DOWN") {
+	if (body.alert_type == "ALERT_FAILURE") {
 		_status = IncidentStatus.OPEN;
-	} else if (body.current_state == "UP") {
+	} else if (body.alert_type == "ALERT_RECOVERY") {
 		_status = IncidentStatus.RESOLVED;
 	} else {
 		return new Response("Event not handled", { status: 200 });
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
 		},
 	});
 	if (incident) {
-		if (_status == IncidentStatus.RESOLVED) {
+		if (_status == "RESOLVED") {
 			await prisma.incident.update({
 				where: { id: incident.id },
 				data: {
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
 							status: IncidentStatus.RESOLVED,
 							updateBy: {
 								connect: {
-									id: process.env.PINGDOM_USER_ID || "",
+									id: process.env.CHECKLY_USER_ID || "",
 								},
 							},
 						},
@@ -72,7 +71,7 @@ export async function POST(request: Request) {
 				},
 			});
 		}
-		if (_status == IncidentStatus.OPEN) {
+		if (_status == "OPEN") {
 			await prisma.incident.update({
 				where: {
 					id: incident.id,
@@ -107,7 +106,7 @@ export async function POST(request: Request) {
 				description: body.long_description || "",
 				reportedBy: {
 					connect: {
-						id: process.env.PINGDOM_USER_ID || "",
+						id: process.env.CHECKLY_USER_ID || "",
 					},
 				},
 				id: makeId(8),
@@ -122,7 +121,7 @@ export async function POST(request: Request) {
 						status: _status || IncidentStatus.OPEN,
 						updateBy: {
 							connect: {
-								id: process.env.PINGDOM_USER_ID || "",
+								id: process.env.CHECKLY_USER_ID || "",
 							},
 						},
 					},

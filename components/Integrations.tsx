@@ -26,13 +26,13 @@ const integrations = [
     {
       name: 'Pingdom',
       icon: <Globe className="w-8 h-8" />,
-      description: 'Website performance and availability monitoring from multiple locations.'
+      description: 'Automate incident creation/resolution using Pingdom.'
     },
-    // {
-    //   name: 'StatusCake',
-    //   icon: <Server className="w-8 h-8" />,
-    //   description: 'Automate incident creation/resolution using Updown.io.'
-    // },
+    {
+      name: 'Checkly',
+      icon: <Server className="w-8 h-8" />,
+      description: 'Automate incident creation/resolution using Checkly.'
+    },
   {
     name: "Custom API",
     icon: <Cpu className="w-8 h-8" />,
