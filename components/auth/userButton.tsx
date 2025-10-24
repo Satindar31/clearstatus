@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { User } from "better-auth";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { AccountSettings } from "./accountSettings";
 
 export default function UserButton() {
 	const {
@@ -14,12 +14,10 @@ export default function UserButton() {
 		isPending, //loading state
 	} = authClient.useSession();
 	const [user, setUser] = useState<User | null>();
-	const router = useRouter()
 
 	useEffect(() => {
 		if (isPending == false) {
 			setUser(session?.user ?? null);
-			console.log("User session:", session?.user.image);
 		}
 	}, [isPending]);
 	return (
@@ -39,17 +37,28 @@ export default function UserButton() {
 					/>
 				</div>
 			</PopoverTrigger>
-			<PopoverContent className="w-56">
-				<div className="flex flex-col items-start justify-center p-1">
+			<PopoverContent className="w-fit">
+				<div className="flex flex-col items-start justify-center">
 					<p className="font-medium">{user?.name}</p>
 					<p className="text-sm text-muted-foreground">{user?.email}</p>
-					<Button variant="outline" onClick={() => authClient.signOut({
-						fetchOptions: {
-							onSuccess() {
-								window.location.href = "/"
-							},
-						}
-					})}>Sign Out</Button>
+					<div className="grid grid-cols-2 gap-2 mt-4 w-full">
+						<AccountSettings user={user} />
+						
+						<Button
+							variant="outline"
+							onClick={() =>
+								authClient.signOut({
+									fetchOptions: {
+										onSuccess() {
+											window.location.href = "/";
+										},
+									},
+								})
+							}
+						>
+							Sign Out
+						</Button>
+					</div>
 				</div>
 			</PopoverContent>
 		</Popover>
