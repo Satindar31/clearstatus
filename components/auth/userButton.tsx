@@ -46,7 +46,7 @@ export default function UserButton() {
 					<Button variant="outline" onClick={() => authClient.signOut({
 						fetchOptions: {
 							onSuccess() {
-								router.push("/")
+								window.location.href = "/"
 							},
 						}
 					})}>Sign Out</Button>
