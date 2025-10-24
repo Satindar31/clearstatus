@@ -22,12 +22,20 @@ export async function PUT(request: Request) {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
+	console.log("Recieved update creation request:", {
+		title,
+		description,
+		severity,
+		status,
+		slug,
+	});
 
 	try {
 		if (severity !== null) {
 			const update = await prisma.updates.create({
 				data: {
 					id: makeId(8),
+					title,
 					message: description,
 					status: status,
 					incident: {
@@ -43,6 +51,9 @@ export async function PUT(request: Request) {
 					},
 				},
 			});
+			console.log("Created update", {
+				update,
+			});
 			await prisma.incident.update({
 				where: {
 					id: update.incidentId,
@@ -51,18 +62,7 @@ export async function PUT(request: Request) {
 					severity,
 				},
 			});
-			const userSess = await prisma.user.findUnique({
-				where: {
-					id: session?.user.id,
-				},
-			});
-			const userUpd = await prisma.user.findUnique({
-				where: {
-					id: update.updateById!,
-				},
-			});
-			console.log("User Sess:", userSess);
-			console.log("User Upd:", userUpd);
+
 			return new Response(JSON.stringify(update), {
 				status: 201,
 			});

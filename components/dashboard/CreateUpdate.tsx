@@ -202,7 +202,7 @@ export function PreviousUpdates({ updates }: { updates: Updates[] }) {
 					>
 						<Dialog>
 							<DialogTrigger>
-								<p className="text-gray-700">{update.message}</p>
+								<p className="text-gray-700">{update.title}</p>
 							</DialogTrigger>
 							<DialogContent>
 								<DialogHeader>
