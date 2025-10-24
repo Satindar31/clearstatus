@@ -106,6 +106,23 @@ function ProfileForm({
                 error: "Failed to update profile.",
             })
         }
+        if(user?.email !== email) {
+            const res = authClient.changeEmail({
+                newEmail: email,
+                callbackURL: window.location.origin + "/dashboard",
+            }).then(() => {
+                setLoading(false);
+            })
+            toast.promise(res, {
+                loading: "Sending email change verification...",
+                success: () => {
+                    router.refresh();
+                    return "Verification email sent! Please check your new email's inbox.";
+                },
+                error: "Failed to send verification email.",
+            })
+
+        }
 	}
 	return (
 		<form

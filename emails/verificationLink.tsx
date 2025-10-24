@@ -27,7 +27,7 @@ export const EmailVerification = ({
   <Html>
     <Head />
     <Body style={main}>
-      <Preview>Your login code for {process.env.APP_NAME!}</Preview>
+      <Preview>Your login link for {process.env.APP_NAME!}</Preview>
       <Container style={container}>
         <Img
           src={`${baseUrl}/logos/png/logo only white transparent bg.png`}

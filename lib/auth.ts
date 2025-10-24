@@ -104,7 +104,40 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
+	user: {
+		changeEmail: {
+			enabled: true,
+			sendChangeEmailVerification: async (data, request) => {
+				const useMail = await get("use-email");
+				if (useMail == "false") {
+					return;
+				}
+				const mailFrom = await get("mail-from");
+				const from =
+					typeof mailFrom === "string" && mailFrom.length > 0
+						? mailFrom
+						: undefined;
+				const emailHtml = await render(
+					createElement(EmailVerification, {
+						validationLink: data.url,
+					}),
+				);
 
+				const options = {
+					from,
+					to: data.user.email,
+					subject: `Verify your new email address for ${process.env.APP_NAME!}`,
+					html: emailHtml,
+				};
+
+				try {
+					await transporter.sendMail(options);
+				} catch (error) {
+					console.error("Error sending email:", error);
+				}
+			},
+		},
+	},
 	rateLimit: {
 		storage: "database",
 		modelName: "rateLimit",
@@ -112,7 +145,7 @@ export const auth = betterAuth({
 			"/send-verification-email": {
 				window: 15 * 60, // 15 minutes
 				max: 5, // limit each IP to 5 requests per window
-			}
-		}
+			},
+		},
 	},
 });
