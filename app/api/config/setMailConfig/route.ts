@@ -1,3 +1,4 @@
+import Get from "@/lib/edgeClient";
 import { get } from "@vercel/edge-config";
 import { NextRequest } from "next/server";
 
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
   if (!mailHost || !mailPort || !mailUser || !mailPass || !mailFrom) {
     return new Response("Invalid request", { status: 400 });
   }
-  const mailEnabled = await get("use-email");
+  const mailEnabled = await Get("use-email");
   if (mailEnabled !== "true") {
     return new Response("Email not enabled", { status: 400 });
   }

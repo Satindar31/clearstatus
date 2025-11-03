@@ -14,17 +14,18 @@ import { createElement } from "react";
 import { ResetPasswordEmail } from "@/emails/passwordReset";
 import { transporter } from "./mail";
 import EmailVerification from "@/emails/verificationLink";
+import Get from "./edgeClient";
 
 export const auth = betterAuth({
 	appName: process.env.APP_NAME || "ClearStatus",
 	emailAndPassword: {
 		enabled: true,
 		async sendResetPassword(data, request) {
-			const useMail = await get("use-email");
+			const useMail = await Get("use-email");
 			if (useMail == "false") {
 				return;
 			}
-			const mailFrom = await get("mail-from");
+			const mailFrom = await Get("mail-from");
 			const from =
 				typeof mailFrom === "string" && mailFrom.length > 0
 					? mailFrom
@@ -47,17 +48,17 @@ export const auth = betterAuth({
 		},
 		requireEmailVerification: true,
 
-		disableSignUp: (await get("allow-registrations")) === "true" ? true : false,
+		disableSignUp: (await Get("allow-registrations")) === "true" ? true : false,
 	},
 	emailVerification: {
 		autoSignInAfterVerification: true,
 		expiresIn: 5 * 60, // 5 minutes
 		sendVerificationEmail: async ({ user, url, token }, request) => {
-			const useMail = await get("use-email");
+			const useMail = await Get("use-email");
 			if (useMail == "false") {
 				return;
 			}
-			const mailFrom = await get("mail-from");
+			const mailFrom = await Get("mail-from");
 			const from =
 				typeof mailFrom === "string" && mailFrom.length > 0
 					? mailFrom
@@ -109,11 +110,11 @@ prompt: "select_account",
 		changeEmail: {
 			enabled: true,
 			sendChangeEmailVerification: async (data, request) => {
-				const useMail = await get("use-email");
+				const useMail = await Get("use-email");
 				if (useMail == "false") {
 					return;
 				}
-				const mailFrom = await get("mail-from");
+				const mailFrom = await Get("mail-from");
 				const from =
 					typeof mailFrom === "string" && mailFrom.length > 0
 						? mailFrom
