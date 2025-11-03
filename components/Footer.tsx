@@ -45,7 +45,6 @@ export default function Footer() {
               <li><Link href="#features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
               <li><Link href="#integrations" className="text-gray-400 hover:text-white transition-colors">Integrations</Link></li>
               <li><Link href="#documentation" className="text-gray-400 hover:text-white transition-colors">Documentation</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">API</Link></li>
             </ul>
           </div>
 
@@ -67,7 +66,7 @@ export default function Footer() {
             <span>for the developer community</span>
           </div>
           <div className="mt-4 md:mt-0 text-gray-400">
-            <span>© 2025 ClearStatus. Open source under AGPL-3.0 License.</span>
+            <span>© 2025 ClearStatus. Open source under Apache-2.0 License.</span>
           </div>
         </div>
       </div>
