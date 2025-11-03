@@ -1,4 +1,4 @@
-import { get } from "@vercel/edge-config";
+import Get from "@/lib/edgeClient";
 
 export async function GET() {
     const checkers = await Get("allowed-checkers")
