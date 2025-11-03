@@ -11,11 +11,14 @@ ClearStatus is a modern status page solution built with Next.js that allows you 
 
 ## Getting Started
 
-First, run the development server:
+### Deploy with docker
 
 ```bash
-yarn install
-yarn dev
+git clone https://github.com/satindar31/clearstatus
+cd clearstatus
+cp .env.example .env
+nano .env
+docker compose up -d
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
