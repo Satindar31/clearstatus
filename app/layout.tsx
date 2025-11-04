@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
-        <Script defer src={process.env.UMAMI_HOST} data-website-id={process.env.UMAMI_WEBSITE_ID} />
+        <Script defer src={`${process.env.UMAMI_HOST}/script.js`} data-website-id={process.env.UMAMI_WEBSITE_ID} />
       </body>
     </html>
   );
