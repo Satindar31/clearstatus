@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "sonner";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
+        <Script defer src={process.env.UMAMI_HOST} data-website-id={process.env.UMAMI_WEBSITE_ID} />
       </body>
     </html>
   );
