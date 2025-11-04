@@ -1,3 +1,5 @@
+![clearstatus](https://socialify.git.ci/satindar31/clearstatus/image?issues=1&language=1&name=1&owner=1&pattern=Circuit+Board&theme=Auto)
+
 # ClearStatus
 
 ClearStatus is a modern status page solution built with Next.js that allows you to deploy customizable status pages for your projects and services. Similar to platforms like Instatus, Atlassian Statuspage, or statuspage.io, ClearStatus provides an easy way to communicate service availability and incidents to your users.
@@ -11,11 +13,14 @@ ClearStatus is a modern status page solution built with Next.js that allows you 
 
 ## Getting Started
 
-First, run the development server:
+### Deploy with docker
 
 ```bash
-yarn install
-yarn dev
+git clone https://github.com/satindar31/clearstatus
+cd clearstatus
+cp .env.example .env
+nano .env
+docker compose up -d
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
